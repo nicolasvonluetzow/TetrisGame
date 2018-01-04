@@ -25,8 +25,9 @@ Angelehnt an die erste veröffentlichte Version von Tetris:
 
 ## Design
 ### (i) Programmstruktur
-Die wichtigste Funktion des Programmes ist die tick()-Methode, welche jeden Tick des Spiels aufgerufen wird, es sei denn es wurde noch nicht gestartet oder bereits beendet. 
-Diese ruft, unter anderem, die Methoden display(), getInput() und update() auf. Diese sind für die Ausgabe, den Input und das Berechnen des nächsten Ticks verantwortlich. 
+Die wichtigste Funktion des Programmes ist die `tick()` Methode, welche jeden Tick des Spiels aufgerufen wird, es sei denn es wurde noch nicht gestartet oder bereits beendet. 
+In der Hauptstruktur `struct tetrisGame{};` befinden sich die gesamten Daten zum Spiel, diese reichen von der Map, mit der Zeilen und Spaltenanzahl, dem Scoresystem, das Levelsystem, 
+mit Wert bis zum nächsten Level, sowie dem gerade fallenden Block und dem nächsten Block.
 Verliert der Spieler, so wird ein “Game Over” - Fenster angezeigt, welches auch den erreichten Score enthält. Aus diesem Fenster kann dann das Spiel beendet werden.
 
 ### (ii) wichtige Methoden
