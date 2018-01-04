@@ -52,24 +52,7 @@ void generateNext(tetrisGame *game);
 
 
 ### (iii) zentrale Strukturen
-#### Struktur für aktuelle Positionen
-``` c
-struct position { 
-  int x; 
-  int y; 
-};
-```
-
-#### Struktur für die Blockart, die Rotation und die Position
-``` c
-struct block { 
-  int type; 
-  int orientation; 
-  position pos; 
-};
-```
-
-#### Hauptstruktur, beinhaltet die Map und alle weiteren wichtigen Daten um zu arbeiten 
+#### Hauptstruktur, enthält die Map, die Zeilen-/Spaltenanzahl, den Score, Anstieg zum Level und den aktuellen, sowie nächsten Block 
 ``` c
 struct tetrisGame { 
   int rows; 
@@ -78,7 +61,24 @@ struct tetrisGame {
   int score; 
   int level; 
   int linesToNextLevel; 
-  block falling, 
-  block next
+  struct block falling, 
+  struct block next
+};
+```
+
+#### Struktur für die Blockart, die Rotation und die Position
+``` c
+struct block { 
+  int type; 
+  int orientation; 
+  struct position pos; 
+};
+```
+
+#### Struktur für aktuelle Positionen
+``` c
+struct position { 
+  int x; 
+  int y; 
 };
 ```
