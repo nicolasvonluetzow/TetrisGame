@@ -1,4 +1,4 @@
-# Tetris-Planung
+# Prozedurale Programmierung Projektplanung - “Tetris”
 
 ## Spezifikationen 
 
