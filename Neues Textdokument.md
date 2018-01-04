@@ -61,8 +61,8 @@ struct tetrisGame {
   int score; 
   int level; 
   int linesToNextLevel; 
-  struct block falling, 
-  struct block next
+  struct block falling; 
+  struct block next;
 };
 ```
 
