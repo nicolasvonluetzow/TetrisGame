@@ -3,7 +3,7 @@
 
 int main(){
 	printf("\n\n");
-	printf("hey");
+	printf("hey ist jetzt anders");
 	test(); /* Kann geloescht werden, dient als test */
 	return 0;
 }

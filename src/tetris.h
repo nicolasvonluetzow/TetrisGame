@@ -1,1 +1,0 @@
-void test(); /* Kann geloescht werden, dient als test */

@@ -1,15 +1,19 @@
 CC = gcc
-CFLAGS = -std=c99 -pedantic -Wall -Wextra
-#math.h
-LDFLAGS = -lm
+CFLAGS = -std=c99 -pedantic -Wall -Wextra -I./SDL/include
+LFLAGS = -L./SDL/lib -lSDL2 -lSDL2main 
 
-all: TetrisLauncher.exe
-	TetrisLauncher.exe
+#Sources
+SRC = main.c 
+#Headers
+HDRS = 
+#Name der Exe
+EXE = TetrisLauncher.exe
 
 
-%.o:%.c tetris.h
-	$(CC) $(CFLAGS) -c -o $@ $<
+build: $(EXE)
 
-	
-TetrisLauncher.exe: main.o  tetris.o 
-	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS) 
+all: $(EXE)
+	./$<
+
+$(EXE): $(SRC)
+	$(CC) $(CFLAGS) -o $(EXE) $(SRC) $(LFLAGS)
