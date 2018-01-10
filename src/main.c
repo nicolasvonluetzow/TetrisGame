@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_timer.h>
-#include <SDL2/SDL_image.h>
+//#include <SDL2/SDL_image.h>
 
 
 /* main(...) // Apple/Windows */
@@ -40,18 +40,18 @@ int WinMain(int argc, char **argv)
 		SDL_Quit();
 		return 1;
 	}
-	
+	/*
 	SDL_Surface* sur = IMG_Load("ressources/hello.png");
 	
 	if (!sur)
 	{
-		printf("Fehler beim Initialisierungsprozesses von SDL: %s\n", SDL_GetError());
+		printf("Fehler beim Initialisierungsprozesses des Bildes: %s\n", SDL_GetError());
 		SDL_DestroyWindow(win);
 		SDL_DestroyRenderer(rend);
 		SDL_Quit();
 		return 1;
 	}
-	
+	*/
 	SDL_Delay(5000);
 	
 	SDL_DestroyWindow(win);

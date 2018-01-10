@@ -3,10 +3,10 @@ CFLAGS = -std=c99 -pedantic -Wall -Wextra -I./SDL/include
 LFLAGS = -L./SDL/lib -lSDL2main -lSDL2  
 
 #Sources
-SRC = main.c 
+SRC = main2.c 
 #Headers
 HDRS = 
-#Name der Exe
+#Kompilierte Exe
 EXE = TetrisLauncher.exe
 
 
