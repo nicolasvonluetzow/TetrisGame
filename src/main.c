@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_timer.h>
-//#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_image.h>
 
 
 /* main(...) // Apple/Windows */
@@ -22,7 +22,7 @@ int WinMain(int argc, char **argv)
 	SDL_Window* win = SDL_CreateWindow("Tetris 1984", 
 										SDL_WINDOWPOS_CENTERED,
 										SDL_WINDOWPOS_CENTERED,
-										640, 480, 0);
+										1280, 720, 0);
 	if (!win)
 	{
 		printf("Fehler beim Erstellen des Fensters: %s\n", SDL_GetError());
@@ -35,25 +35,43 @@ int WinMain(int argc, char **argv)
 	
 	if (!rend)
 	{
-		printf("Fehler beim Initialisierungsprozesses des Renderers: %s\n", SDL_GetError());
+		printf("Fehler beim Initialisieren des Renderers: %s\n", SDL_GetError());
 		SDL_DestroyWindow(win);
 		SDL_Quit();
 		return 1;
 	}
-	/*
-	SDL_Surface* sur = IMG_Load("ressources/hello.png");
 	
-	if (!sur)
+	SDL_Surface* surface = IMG_Load("ressources/Tetris Background.jpg");
+	
+	if (!surface)
 	{
-		printf("Fehler beim Initialisierungsprozesses des Bildes: %s\n", SDL_GetError());
-		SDL_DestroyWindow(win);
+		printf("Fehler beim Initialisieren der Oberflaeche: %s\n", SDL_GetError());
 		SDL_DestroyRenderer(rend);
+		SDL_DestroyWindow(win);
 		SDL_Quit();
 		return 1;
 	}
-	*/
+	
+	SDL_Texture* tex = SDL_CreateTextureFromSurface(rend, surface);
+	SDL_FreeSurface(surface);
+	
+	if (!tex)
+	{
+		printf("Fehler beim Erstellen der Textur: %s\n", SDL_GetError());
+		SDL_DestroyRenderer(rend);
+		SDL_DestroyWindow(win);
+		SDL_Quit();
+		return 1;
+	}
+	
+	SDL_RenderClear(rend);
+	SDL_RenderCopy(rend, tex, NULL, NULL);
+	SDL_RenderPresent(rend);
+	
 	SDL_Delay(5000);
 	
+	SDL_DestroyTexture(tex);
+	SDL_DestroyRenderer(rend);
 	SDL_DestroyWindow(win);
 	SDL_Quit();
 	

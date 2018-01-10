@@ -15,5 +15,7 @@ int WinMain(int argc, char **argv)
 		return 1;
 	}
 
+	
 	SDL_Quit();
+	return 0;
 }

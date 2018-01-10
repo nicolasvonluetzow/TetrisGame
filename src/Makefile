@@ -1,9 +1,9 @@
 CC = gcc
 CFLAGS = -std=c99 -pedantic -Wall -Wextra -I./SDL/include
-LFLAGS = -L./SDL/lib -lSDL2main -lSDL2  
+LFLAGS = -L./SDL/lib -lSDL2main -lSDL2 -lSDL2_image
 
 #Sources
-SRC = main2.c 
+SRC = main.c 
 #Headers
 HDRS = 
 #Kompilierte Exe
