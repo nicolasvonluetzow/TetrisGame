@@ -52,7 +52,7 @@ int WinMain(int argc, char **argv)
 		return 1;
 	}
 	
-	SDL_Surface* surface = IMG_Load("ressources/Tetris Background.jpg");
+	SDL_Surface* surface = IMG_Load("textures/BlockZ.png");
 	
 	if (!surface)
 	{
@@ -83,8 +83,11 @@ int WinMain(int argc, char **argv)
 	
 	//Dimension der Textur
 	SDL_QueryTexture(tex, NULL, NULL, &dest.w, &dest.h);
+	
+	/* Eventuelles Anpassen der Groesse der Textur 
 	dest.w /= 2;
 	dest.h /= 2;
+	*/
 	
 	// Starte Sprite in der Mitte des Fensters
 	float x_pos = (RESOLUTION_WIDTH - dest.w) / 2;
@@ -92,12 +95,6 @@ int WinMain(int argc, char **argv)
 	float x_vel = 0;
 	float y_vel = 0;
 	
-/*	//Positioniere das Sprite an der unteren Mitte des Fensters
-	dest.x = (RESOLUTION_WIDTH - dest.w) / 2;
-	
-	// float Resolution fuer die y- Position
-	float y_pos = RESOLUTION_HEIGHT;
-*/
 	// Bewegungsrichtungen
 	int up = 0;
 	int down = 0;
