@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -std=c99 -pedantic -Wall -Wextra -I./SDL/include
-LFLAGS = -L./SDL/lib -lSDL2 -lSDL2main 
+LFLAGS = -L./SDL/lib -lSDL2main -lSDL2  
 
 #Sources
 SRC = main.c 
