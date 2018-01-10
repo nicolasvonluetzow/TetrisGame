@@ -6,8 +6,8 @@ LFLAGS = -L./SDL/lib -lSDL2main -lSDL2 -lSDL2_image
 SRC = main.c 
 #Headers
 HDRS = 
-#Kompilierte Exe
-EXE = TetrisLauncher.exe
+#Kompilierte Exe (T.exe beim Entwickeln, um es schneller eingeben zu koennen)
+EXE = T.exe
 
 
 build: $(EXE)

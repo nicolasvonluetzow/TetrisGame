@@ -5,8 +5,9 @@
 
 #define RESOLUTION_WIDTH 1280
 #define RESOLUTION_HEIGHT 720
+#define FPS 60
 
-// Geschwindigkeit in Pixel/Sekunde
+// Geschwindigkeit ueber den Bildschirm in Pixel/Sekunde
 #define SPEED 300
 
 /* main(...) // Apple/Windows */
@@ -106,7 +107,7 @@ int WinMain(int argc, char **argv)
 	// Schliessen auf false (0)
 	int running = 1;
 	
-	/*
+	/*  // Controller 
 	SDL_Joystick* joystick = SDL_JoystickOpen(0);
 	printf("Controller Name: %s\n", SDL_JoystickName(joystick));
 	printf("test");
@@ -129,6 +130,9 @@ int WinMain(int argc, char **argv)
 				{
 					switch (event.key.keysym.scancode)
 					{
+						case SDL_SCANCODE_ESCAPE:
+							running = 0;
+							break;
 						case SDL_SCANCODE_W:
 						case SDL_SCANCODE_UP:
 							up = 1;
@@ -180,8 +184,8 @@ int WinMain(int argc, char **argv)
 		if (right && !left) x_vel = SPEED;
 		
 		// Positions Update
-		x_pos += x_vel / 60;
-		y_pos += y_vel / 60;
+		x_pos += x_vel / FPS;
+		y_pos += y_vel / FPS;
 		
 		// Kollision mit den Raendern
 		if (x_pos <= 0) x_pos = 0;
@@ -201,7 +205,7 @@ int WinMain(int argc, char **argv)
 		SDL_RenderPresent(rend);
 				
 		// Fps
-		SDL_Delay(1000/60);
+		SDL_Delay(1000/FPS);
 	} /* Animation Ende */
 	
 	/* Resourcen schliessen */
