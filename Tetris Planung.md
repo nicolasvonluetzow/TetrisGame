@@ -26,8 +26,8 @@ Angelehnt an die erste veröffentlichte Version von Tetris:
 ## Design
 ### (i) Programmstruktur
 Die wichtigste Funktion des Programmes ist die `tick()` Methode, welche jeden Tick des Spiels aufgerufen wird, es sei denn es wurde noch nicht gestartet oder bereits beendet. 
-In der Hauptstruktur `struct tetrisGame{};` befinden sich die gesamten Daten zum Spiel, diese reichen von der Map, mit der Zeilen und Spaltenanzahl, dem Scoresystem, das Levelsystem, 
-mit Wert bis zum nächsten Level, sowie dem gerade fallenden Block und dem nächsten Block.
+In der Hauptstruktur `struct tetrisGame{}` befinden sich die gesamten Daten zum Spiel. Diese reichen von der Map, mit Zeilen und Spaltenanzahl, Score, Level, 
+bis zum gerade fallenden Block sowie dem nächsten Block.
 Verliert der Spieler, so wird ein “Game Over” - Fenster angezeigt, welches auch den erreichten Score enthält. Aus diesem Fenster kann dann das Spiel beendet werden.
 
 ### (ii) wichtige Methoden
@@ -53,7 +53,7 @@ void generateNext(tetrisGame *game);
 
 
 ### (iii) zentrale Strukturen
-#### Hauptstruktur, enthält die Map, die Zeilen-/Spaltenanzahl, den Score, Anstieg zum Level und den aktuellen, sowie nächsten Block 
+#### Hauptstruktur, enthält die Map, die Zeilen-/Spaltenanzahl, den Score, Anstieg zum nächsten Level und den aktuellen, sowie den nächsten Block.
 ``` c
 struct tetrisGame { 
   int rows; 
@@ -67,7 +67,7 @@ struct tetrisGame {
 };
 ```
 
-#### Struktur für die Blockart, die Rotation und die Position
+#### Struktur für einen Block. Enthält die Blockart, die Rotation und die Position.
 ``` c
 struct block { 
   int type; 
@@ -76,7 +76,7 @@ struct block {
 };
 ```
 
-#### Struktur für aktuelle Positionen
+#### Struktur für Positionen.
 ``` c
 struct position { 
   int x; 
