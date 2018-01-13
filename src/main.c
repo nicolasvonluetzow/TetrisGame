@@ -11,14 +11,8 @@
 // Geschwindigkeit ueber den Bildschirm in Pixel/Sekunde
 #define SPEED 300
 
-/* main(...) // Apple/Windows */
-#ifdef __APPLE__ /* Apple Macro */
-int main(int argc, char **argv)
-#elif defined __MINGW32__ /* Windows Macro */
-int WinMain(int argc, char **argv) 
-#endif
 
-/* main(...) Anfang */
+int main(int argc, char *argv[])
 {
 	
 	tetrisGame game;
