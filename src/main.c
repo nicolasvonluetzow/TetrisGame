@@ -158,6 +158,8 @@ int WinMain(int argc, char **argv)
 						case SDL_SCANCODE_RIGHT:
 							right = 1;
 							break;
+						default:
+							break;
 					}
 				}
 				
@@ -180,6 +182,8 @@ int WinMain(int argc, char **argv)
 						case SDL_SCANCODE_D:
 						case SDL_SCANCODE_RIGHT:
 							right = 0;
+							break;
+						default:
 							break;
 					}
 				}
