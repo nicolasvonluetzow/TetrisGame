@@ -2,6 +2,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_image.h>
+#include "tetris.h"
 
 #define RESOLUTION_WIDTH 1280
 #define RESOLUTION_HEIGHT 720
@@ -20,7 +21,18 @@ int WinMain(int argc, char **argv)
 /* main(...) Anfang */
 {
 	
+	tetrisGame game;
+	tetrisGame* pointGame;
+	pointGame = &game;
+	game.rows = 10;
+	game.columns = 10;
+	game.score = 0;
+	game.level = 1;
 	
+	tetrisGetNextBlock (pointGame);
+	tetrisGetNextBlock (pointGame);
+	
+	tetrisTurnBlock (pointGame);
 	
 	/* Anfang Basic Framework */
 	if (SDL_Init( SDL_INIT_VIDEO|SDL_INIT_TIMER ) < 0)

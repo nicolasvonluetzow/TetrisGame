@@ -3,9 +3,9 @@ CFLAGS = -std=c99 -pedantic -Wall -Wextra -I./SDL/include
 LFLAGS = -L./SDL/lib -lSDL2main -lSDL2 -lSDL2_image
 
 #Sources
-SRC = main.c 
+SRC = main.c tetris.c
 #Headers
-HDRS = 
+HDRS = tetris.h
 #Kompilierte Exe (T.exe beim Entwickeln, um es schneller eingeben zu koennen)
 EXE = T.exe
 
