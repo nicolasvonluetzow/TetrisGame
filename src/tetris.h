@@ -11,7 +11,7 @@ typedef struct {
 
 typedef struct {
 	int rows, columns, score, level;
-	int map[10][10][8];
+	int map[10][10];
 	block falling, next;
 } tetrisGame;
 
