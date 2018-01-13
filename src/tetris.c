@@ -1,6 +1,7 @@
 #include "tetris.h"
 #include <stdbool.h>
 
+//Array contains all BlockTypes and all possible orientation
 position blockTypes[7][4][4] = {
 	{ // I
 	{{0,0}, {0,1}, {0,2}, {0,3}},
@@ -39,8 +40,7 @@ position blockTypes[7][4][4] = {
 	{{0,1}, {1,1}, {1,0}, {2,0}}}
 };
 	
-	
-
+//Puts the next Block as the falling block and generates a new next Block.
 void tetrisGetNextBlock (tetrisGame *game){
 	block nextBlock;
 	nextBlock.type = rand() % 8;
@@ -54,10 +54,12 @@ void tetrisGetNextBlock (tetrisGame *game){
 	game->next = nextBlock;
 }
 
+//Turns a Block clockwise.
 void tetrisTurnBlock (tetrisGame *game){
 	game->falling.orientation = (game->falling.orientation + 1) % 4;
 }
 
+//Applies gravity once. Not to be called every tick.
 void tetrisApplyGravity (tetrisGame *game){
 	game->falling.pos.y -= 1;
 	bool viable = true;
@@ -78,6 +80,7 @@ void tetrisApplyGravity (tetrisGame *game){
 	}
 }
 
+//Moves the falling block to the left.
 void tetrisMoveLeft (tetrisGame *game){
 	game->falling.pos.x -= 1;
 	bool viable = true;
@@ -97,6 +100,7 @@ void tetrisMoveLeft (tetrisGame *game){
 	}
 }
 
+//Moves the falling block to the right.
 void tetrisMoveRight (tetrisGame *game){
 	game->falling.pos.x += 1;
 	bool viable = true;
@@ -116,6 +120,7 @@ void tetrisMoveRight (tetrisGame *game){
 	}
 }
 
+//Adds the falling Block to the map and generates a new Block.
 void tetrisAddToMap (tetrisGame *game){
 	for (int i = 0; i < 4; i++){
 		int checkX = blockTypes[game->falling.type][game->falling.orientation][i].x + game->falling.pos.x;
