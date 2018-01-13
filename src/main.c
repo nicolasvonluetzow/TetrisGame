@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_image.h>
@@ -14,16 +15,18 @@
 #ifdef __APPLE__ /* Apple Macro */
 int main(int argc, char **argv)
 #elif defined __MINGW32__ /* Windows Macro */
-int WinMain(int argc, char **argv) 
+/*int WinMain(int argc, char **argv) */
 #endif
-
+/* test */
 /* main(...) Anfang */
+
+int main(int argc, char* argv[]) 
 {
 	
 	
 	
 	/* Anfang Basic Framework */
-	if (SDL_Init( SDL_INIT_VIDEO|SDL_INIT_TIMER ) < 0)
+	if (SDL_Init( SDL_INIT_VIDEO|SDL_INIT_TIMER|SDL_INIT_JOYSTICK) < 0)
 	{
 		printf("Fehler beim Initialisierungsprozesses von SDL: %s\n", SDL_GetError());
 		return 1;
@@ -104,13 +107,17 @@ int WinMain(int argc, char **argv)
 	// Schliessen auf false (0)
 	int running = 1;
 	
-	/*  // Controller 
+	/*  Controller */
 	SDL_Joystick* joystick = SDL_JoystickOpen(0);
-	printf("Controller Name: %s\n", SDL_JoystickName(joystick));
-	printf("test");
-	printf("Num Axes: %d\n", SDL_JoystickNumAxes(joystick));
-	printf("Num Buttons: %d\n", SDL_JoystickNumButtons(joystick));
-	*/
+	
+	/* Dokumentation */
+	FILE* controllerdoc;
+	controllerdoc = fopen("controller.txt", "w");
+	fprintf(controllerdoc, "Zuletzt benutzter Controller:\n\n");
+	fprintf(controllerdoc, "Controller Name: %s\n", SDL_JoystickName(joystick));
+	fprintf(controllerdoc, "Anzahl an Axen: %d\n", SDL_JoystickNumAxes(joystick));
+	fprintf(controllerdoc, "Anzahl an Buttons: %d\n", SDL_JoystickNumButtons(joystick));
+	fclose(controllerdoc);
 	
 	/* Animation */
 	while (running)
@@ -146,6 +153,7 @@ int WinMain(int argc, char **argv)
 						case SDL_SCANCODE_RIGHT:
 							right = 1;
 							break;
+						default: break;
 					}
 				}
 				
@@ -169,9 +177,27 @@ int WinMain(int argc, char **argv)
 						case SDL_SCANCODE_RIGHT:
 							right = 0;
 							break;
+						default: break;
 					}
 				}
+
+				else if (event.type == SDL_JOYAXISMOTION)
+				{
+					FILE* jaxis_value;
+						jaxis_value = fopen("jaxis_value.txt", "w");
+						fprintf(jaxis_value, "true\n");
+						
+					if (event.jaxis.axis == 0)
+					{
+						
+						
+						fprintf(jaxis_value, "%d", event.jaxis.value);
+						
+					}
+					fclose(jaxis_value);
+				}
 		}
+		
 		
 		// Geschwindigkeit
 		x_vel = y_vel = 0;
@@ -206,6 +232,7 @@ int WinMain(int argc, char **argv)
 	} /* Animation Ende */
 	
 	/* Resourcen schliessen */
+	SDL_JoystickClose(joystick);
 	SDL_DestroyTexture(tex);
 	SDL_DestroyRenderer(rend);
 	SDL_DestroyWindow(win);
