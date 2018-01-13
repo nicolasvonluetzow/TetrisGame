@@ -46,9 +46,10 @@ void tetrisGetNextBlock (tetrisGame *game){
 	nextBlock.type = rand() % 8;
 	nextBlock.orientation = 0;
 	position posi;
-	posi.x = (game->rows)/2;
+	posi.x = (game->columns)/2;
 	posi.y = 0;
 	nextBlock.pos = posi;
+	
 	game->falling = game->next;
 	game->next = nextBlock;
 }
@@ -58,6 +59,26 @@ void tetrisTurnBlock (tetrisGame *game){
 }
 
 void tetrisApplyGravity (tetrisGame *game){
+	game->falling.pos.y -= 1;
+	bool viable = true;
+	for (int x = 0; x < game->columns; x++){
+		for (int y = 0; y < game->rows; y++){
+			for (int i = 0; i < 4; i++){
+				int checkX = blockTypes[game->falling.type][game->falling.orientation][i].x + game->falling.pos.x;
+				int checkY = blockTypes[game->falling.type][game->falling.orientation][i].y + game->falling.pos.y;
+				if(game->map[checkY][checkX] != 0 || checkY > game->rows){
+					viable = false;
+				}
+			}
+		}
+	}
+	if(!viable){
+		game->falling.pos.y += 1;
+		tetrisAddToMap(game);
+	}
+}
+
+void tetrisMoveLeft (tetrisGame *game){
 	game->falling.pos.x -= 1;
 	bool viable = true;
 	for (int x = 0; x < game->columns; x++){
@@ -65,7 +86,7 @@ void tetrisApplyGravity (tetrisGame *game){
 			for (int i = 0; i < 4; i++){
 				int checkX = blockTypes[game->falling.type][game->falling.orientation][i].x + game->falling.pos.x;
 				int checkY = blockTypes[game->falling.type][game->falling.orientation][i].y + game->falling.pos.y;
-				if(game->map[checkY][checkX] != 0){
+				if(game->map[checkY][checkX] != 0 || checkX < 0){
 					viable = false;
 				}
 			}
@@ -74,4 +95,32 @@ void tetrisApplyGravity (tetrisGame *game){
 	if(!viable){
 		game->falling.pos.x += 1;
 	}
+}
+
+void tetrisMoveRight (tetrisGame *game){
+	game->falling.pos.x += 1;
+	bool viable = true;
+	for (int x = 0; x < game->columns; x++){
+		for (int y = 0; y < game->rows; y++){
+			for (int i = 0; i < 4; i++){
+				int checkX = blockTypes[game->falling.type][game->falling.orientation][i].x + game->falling.pos.x;
+				int checkY = blockTypes[game->falling.type][game->falling.orientation][i].y + game->falling.pos.y;
+				if(game->map[checkY][checkX] != 0 || checkX >= game->columns){
+					viable = false;
+				}
+			}
+		}
+	}
+	if(!viable){
+		game->falling.pos.x -= 1;
+	}
+}
+
+void tetrisAddToMap (tetrisGame *game){
+	for (int i = 0; i < 4; i++){
+		int checkX = blockTypes[game->falling.type][game->falling.orientation][i].x + game->falling.pos.x;
+		int checkY = blockTypes[game->falling.type][game->falling.orientation][i].y + game->falling.pos.y;
+		game->map[checkY][checkX] = game->falling.type + 1;
+	}
+	tetrisGetNextBlock(game);
 }

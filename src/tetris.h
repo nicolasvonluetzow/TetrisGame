@@ -18,3 +18,6 @@ typedef struct {
 void tetrisGetNextBlock (tetrisGame *game);
 void tetrisTurnBlock (tetrisGame *game);
 void tetrisApplyGravity (tetrisGame *game);
+void tetrisMoveLeft (tetrisGame *game);
+void tetrisMoveRight (tetrisGame *game);
+void tetrisAddToMap (tetrisGame *game);
