@@ -6,7 +6,7 @@
 
 #define RESOLUTION_WIDTH 1280
 #define RESOLUTION_HEIGHT 720
-#define FPS 60
+#define FPS 5
 
 // Geschwindigkeit ueber den Bildschirm in Pixel/Sekunde
 #define SPEED 300
@@ -28,6 +28,16 @@ int main(int argc, char *argv[])
 	
 	tetrisTurnBlock (pointGame);
 	
+	/* Init map */
+	for (int x = 0; x < game.columns; x++) 
+	{
+		for (int y = 0; y < game.rows; y++) 
+		{
+			game.map[x][y] = 0;
+		}
+	}
+		
+
 	/* Anfang Basic Framework */
 	if (SDL_Init( SDL_INIT_VIDEO|SDL_INIT_TIMER ) < 0)
 	{
@@ -94,6 +104,17 @@ int main(int argc, char *argv[])
 	dest.w /= 2;
 	dest.h /= 2;
 	*/
+	
+	/* Positions Dokumentation */
+	FILE *pos_xy;
+	pos_xy = fopen("pos_xy.txt", "w");
+	
+	fprintf(pos_xy, "Startingpos:\n");
+	fprintf(pos_xy, "pos_x = %d\n", game.falling.pos.x);
+	fprintf(pos_xy, "pos_y = %d\n\n", game.falling.pos.y);
+	
+	/* Ende dessen */
+	
 	
 	// Starte Sprite in der Mitte des Fensters
 	float x_pos = (RESOLUTION_WIDTH - dest.w) / 2;
@@ -190,6 +211,30 @@ int main(int argc, char *argv[])
 		if (left && !right) x_vel = -SPEED;
 		if (right && !left) x_vel = SPEED;
 		
+		// temp copy 
+	/*	if (up && !down) */
+		if (down && !up) 
+		{
+			tetrisApplyGravity(pointGame);
+			fprintf(pos_xy, "down:\n");
+		}
+		
+		if (left && !right) 
+		{
+			tetrisMoveLeft(pointGame);
+			fprintf(pos_xy, "left:\n");
+		}
+		
+		if (right && !left) 
+		{
+			tetrisMoveRight(pointGame);
+			fprintf(pos_xy, "right:\n");
+		}
+		
+		fprintf(pos_xy, "pos_x: %d\n", game.falling.pos.x);		fprintf(pos_xy, "pos_y: %d\n\n\n", game.falling.pos.y);
+
+		// Ende
+		
 		// Positions Update
 		x_pos += x_vel / FPS;
 		y_pos += y_vel / FPS;
@@ -213,31 +258,16 @@ int main(int argc, char *argv[])
 				
 		// Fps
 		SDL_Delay(1000/FPS);
+		
+		
 	} /* Animation Ende */
 	
 	/* Resourcen schliessen */
+	fclose(pos_xy);
 	SDL_DestroyTexture(tex);
 	SDL_DestroyRenderer(rend);
 	SDL_DestroyWindow(win);
 	SDL_Quit();
 	
 	return 0;
-}
-
-void example(tetrisGame *game){
-	int renderMap[game->rows][game->columns];
-	for (int x = 0; x < game->columns; x++){
-		for (int y = 0; y < game->rows; y++){
-			renderMap[y][x] = game->map[y][x];
-		}
-	}
-	for (int i = 0; i < 4; i++){
-		int checkX = blockTypes[game->falling.type][game->falling.orientation][i].x + game->falling.pos.x;
-		int checkY = blockTypes[game->falling.type][game->falling.orientation][i].y + game->falling.pos.y;
-		renderMap[checkY][checkX] = game->falling.type + 1;
-	}
-	//Now renderMap contains every block including the falling one.
-	//Size of the renderMap is rows * columns.
-	//Every element of renderMap is a value between 0 and 7.
-	//0 representing an empty space, while 1-7 show the color of the space.
 }
