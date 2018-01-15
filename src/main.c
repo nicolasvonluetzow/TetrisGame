@@ -6,10 +6,7 @@
 
 #define RESOLUTION_WIDTH 1280
 #define RESOLUTION_HEIGHT 720
-#define FPS 5
-
-// Geschwindigkeit ueber den Bildschirm in Pixel/Sekunde
-#define SPEED 300
+#define FPS 60
 
 //int renderMap[game.rows][game.columns];
 
@@ -25,6 +22,7 @@ int main(int argc, char *argv[])
 	game.columns = 10;
 	game.score = 0;
 	game.level = 1;
+	int renderMap[game.rows][game.columns];
 	
 	tetrisGetNextBlock (pointGame);
 	tetrisGetNextBlock (pointGame);
@@ -73,10 +71,18 @@ int main(int argc, char *argv[])
 	}
 	
 	SDL_Surface* surface = IMG_Load("textures/BlockZ.png");
+	SDL_Surface* BlockI = IMG_Load("textures/Tex1.png");
+	SDL_Surface* BlockL = IMG_Load("textures/Tex2.png");
+	SDL_Surface* BlockJ = IMG_Load("textures/Tex3.png");
+	SDL_Surface* BlockO = IMG_Load("textures/Tex4.png");
+	SDL_Surface* BlockS = IMG_Load("textures/Tex5.png");
+	SDL_Surface* BlockT = IMG_Load("textures/Tex6.png");
+	SDL_Surface* BlockZ = IMG_Load("textures/Tex7.png");
 	
-	if (!surface)
+	
+	if (!(surface || BlockI || BlockL || BlockJ || BlockO || BlockS || BlockT || BlockZ))
 	{
-		printf("Fehler beim Initialisieren der Oberflaeche: %s\n", SDL_GetError());
+		printf("Fehler beim Initialisieren von mindestens einer der Oberflaechen: %s\n", SDL_GetError());
 		SDL_DestroyRenderer(rend);
 		SDL_DestroyWindow(win);
 		SDL_Quit();
@@ -84,8 +90,23 @@ int main(int argc, char *argv[])
 	}
 	
 	SDL_Texture* tex = SDL_CreateTextureFromSurface(rend, surface);
+	SDL_Texture* texBlockI = SDL_CreateTextureFromSurface(rend, BlockI);
+	SDL_Texture* texBlockL = SDL_CreateTextureFromSurface(rend, BlockL);
+	SDL_Texture* texBlockJ = SDL_CreateTextureFromSurface(rend, BlockJ);
+	SDL_Texture* texBlockO = SDL_CreateTextureFromSurface(rend, BlockO);
+	SDL_Texture* texBlockS = SDL_CreateTextureFromSurface(rend, BlockS);
+	SDL_Texture* texBlockT = SDL_CreateTextureFromSurface(rend, BlockT);
+	SDL_Texture* texBlockZ = SDL_CreateTextureFromSurface(rend, BlockZ);
 	SDL_FreeSurface(surface);
+	SDL_FreeSurface(BlockI);
+	SDL_FreeSurface(BlockL);
+	SDL_FreeSurface(BlockJ);
+	SDL_FreeSurface(BlockO);
+	SDL_FreeSurface(BlockS);
+	SDL_FreeSurface(BlockT);
+	SDL_FreeSurface(BlockZ);
 	
+	/* Fehlercode an die neuen Texturen anpassen */
 	if (!tex)
 	{
 		printf("Fehler beim Erstellen der Textur: %s\n", SDL_GetError());
@@ -100,31 +121,23 @@ int main(int argc, char *argv[])
 	
 	//Struct der Position und Groesse des Sprites
 	SDL_Rect dest;
+	SDL_Rect RBlockI;
+	SDL_Rect RBlockL;
+	SDL_Rect RBlockJ;
+	SDL_Rect RBlockO;
+	SDL_Rect RBlockS;
+	SDL_Rect RBlockT;
+	SDL_Rect RBlockZ;
 	
 	//Dimension der Textur
 	SDL_QueryTexture(tex, NULL, NULL, &dest.w, &dest.h);
-	
-	/* Eventuelles Anpassen der Groesse der Textur 
-	dest.w /= 2;
-	dest.h /= 2;
-	*/
-	
-	/* Positions Dokumentation */
-	FILE *pos_xy;
-	pos_xy = fopen("pos_xy.txt", "w");
-	
-	fprintf(pos_xy, "Startingpos:\n");
-	fprintf(pos_xy, "pos_x = %d\n", game.falling.pos.x);
-	fprintf(pos_xy, "pos_y = %d\n\n", game.falling.pos.y);
-	
-	/* Ende dessen */
-	
-	
-	// Starte Sprite in der Mitte des Fensters
-	float x_pos = (RESOLUTION_WIDTH - dest.w) / 2;
-	float y_pos = (RESOLUTION_HEIGHT - dest.h) / 2;
-	float x_vel = 0;
-	float y_vel = 0;
+	SDL_QueryTexture(texBlockI, NULL, NULL, &RBlockI.w, &RBlockI.h);
+	SDL_QueryTexture(texBlockL, NULL, NULL, &RBlockL.w, &RBlockL.h);
+	SDL_QueryTexture(texBlockJ, NULL, NULL, &RBlockJ.w, &RBlockJ.h);
+	SDL_QueryTexture(texBlockO, NULL, NULL, &RBlockO.w, &RBlockO.h);
+	SDL_QueryTexture(texBlockS, NULL, NULL, &RBlockS.w, &RBlockS.h);
+	SDL_QueryTexture(texBlockT, NULL, NULL, &RBlockT.w, &RBlockT.h);
+	SDL_QueryTexture(texBlockZ, NULL, NULL, &RBlockZ.w, &RBlockZ.h);
 	
 	// Bewegungsrichtungen
 	int up = 0;
@@ -208,63 +221,79 @@ int main(int argc, char *argv[])
 				}
 		}
 		
-		// Geschwindigkeit
-		x_vel = y_vel = 0;
-		if (up && !down) y_vel = -SPEED;
-		if (down && !up) y_vel = SPEED;
-		if (left && !right) x_vel = -SPEED;
-		if (right && !left) x_vel = SPEED;
 		
-		// temp copy 
+		
 	/*	if (up && !down) */
 		if (down && !up) 
 		{
 			tetrisApplyGravity(pointGame);
-			fprintf(pos_xy, "down:\n");
 		}
 		
 		if (left && !right) 
 		{
 			tetrisMoveLeft(pointGame);
-			fprintf(pos_xy, "left:\n");
 		}
 		
 		if (right && !left) 
 		{
 			tetrisMoveRight(pointGame);
-			fprintf(pos_xy, "right:\n");
-		}
-		
-		fprintf(pos_xy, "pos_x: %d\n", game.falling.pos.x);		fprintf(pos_xy, "pos_y: %d\n\n\n", game.falling.pos.y);
-
-		// Ende
+		}	// Ende
 		
 		/*
-		// Positions Update
-		x_pos += x_vel / FPS;
-		y_pos += y_vel / FPS;
-		
-		// Kollision mit den Raendern
-		if (x_pos <= 0) x_pos = 0;
-		if (y_pos <= 0) y_pos = 0;
-		if (x_pos >= RESOLUTION_WIDTH - dest.w) x_pos = RESOLUTION_WIDTH - dest.w;
-		if (y_pos >= RESOLUTION_HEIGHT - dest.h) y_pos = RESOLUTION_HEIGHT - dest.h;
-		
-		// Positionen der Struct 
-		
-		dest.y = (int) y_pos;
-		dest.x = (int) x_pos;
-		*/
-		
 		dest.x = (game.falling.pos.x * PpB) + (RESOLUTION_WIDTH /2) - (5 * PpB);
 		dest.y = (game.falling.pos.y * PpB);
+		*/
 		
 		// Leere das Fenster
 		SDL_RenderClear(rend);
 		
 		// Zeichne das Bild ins Fenster
-		SDL_RenderCopy(rend, tex, NULL, &dest);
+		//SDL_RenderCopy(rend, tex, NULL, &dest);
+		//SDL_RenderPresent(rend);
+		
+		/* Neue Texturen auf die Map */
+		tetrisDrawRenderMap(pointGame, **renderMap);
+		for (int x = 0; x < game.columns; x++)
+		{
+			for (int y = 0; y < game.rows; y++)
+			{
+				switch (renderMap[y][x])
+				{
+					case 0: break;
+					case 1: RBlockI.x = x;
+							RBlockI.y = y;
+								SDL_RenderCopy(rend, texBlockI, NULL, &RBlockI);
+							break;
+					case 2: RBlockL.x = x;
+							RBlockL.y = y;
+								SDL_RenderCopy(rend, texBlockL, NULL, &RBlockL);
+							break;
+					case 3: RBlockJ.x = x;
+							RBlockJ.y = y;
+								SDL_RenderCopy(rend, texBlockJ, NULL, &RBlockJ);
+							break;
+					case 4: RBlockS.x = x;
+							RBlockS.y = y;
+								SDL_RenderCopy(rend, texBlockS, NULL, &RBlockS);
+							break;
+					case 5: RBlockT.x = x;
+							RBlockT.y = y;
+								SDL_RenderCopy(rend, texBlockT, NULL, &RBlockT);
+							break;
+					case 6: RBlockO.x = x;
+							RBlockO.y = y;
+								SDL_RenderCopy(rend, texBlockO, NULL, &RBlockO);
+							break;
+					case 7: RBlockZ.x = x;
+							RBlockZ.y = y;
+								SDL_RenderCopy(rend, texBlockZ, NULL, &RBlockZ);
+							break;
+					default: break;
+				} 
+			}
+		}
 		SDL_RenderPresent(rend);
+				
 				
 		// Fps
 		SDL_Delay(1000/FPS);
@@ -273,8 +302,14 @@ int main(int argc, char *argv[])
 	} /* Animation Ende */
 	
 	/* Resourcen schliessen */
-	fclose(pos_xy);
 	SDL_DestroyTexture(tex);
+	SDL_DestroyTexture(texBlockI);
+	SDL_DestroyTexture(texBlockL);
+	SDL_DestroyTexture(texBlockJ);
+	SDL_DestroyTexture(texBlockS);
+	SDL_DestroyTexture(texBlockT);
+	SDL_DestroyTexture(texBlockO);
+	SDL_DestroyTexture(texBlockZ);
 	SDL_DestroyRenderer(rend);
 	SDL_DestroyWindow(win);
 	SDL_Quit();

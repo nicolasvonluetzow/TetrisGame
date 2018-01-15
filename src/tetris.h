@@ -25,3 +25,4 @@ void tetrisApplyGravity (tetrisGame *game);
 void tetrisMoveLeft (tetrisGame *game);
 void tetrisMoveRight (tetrisGame *game);
 void tetrisAddToMap (tetrisGame *game);
+void tetrisDrawRenderMap(tetrisGame *game, int **renderMap);
