@@ -131,20 +131,6 @@ void tetrisAddToMap (tetrisGame *game){
 	tetrisGetNextBlock(game);
 }
 
-void tetrisDrawRenderMap(tetrisGame *game, int **renderMap){
-	
-	for (int x = 0; x < game->columns; x++){
-		for (int y = 0; y < game->rows; y++){
-			renderMap[y][x] = game->map[y][x];
-		}
-	}
-	for (int i = 0; i < 4; i++){
-		int checkX = blockTypes[game->falling.type][game->falling.orientation][i].x + game->falling.pos.x;
-		int checkY = blockTypes[game->falling.type][game->falling.orientation][i].y + game->falling.pos.y;
-		renderMap[checkY][checkX] = game->falling.type + 1;
-	}
-	//Now renderMap contains every block including the falling one.
-	//Size of the renderMap is rows * columns.
-	//Every element of renderMap is a value between 0 and 7.
-	//0 representing an empty space, while 1-7 show the color of the space.
+position tetrisGetArrayInfo(int x, int y, int z){
+	return blockTypes[x][y][z];
 }

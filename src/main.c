@@ -22,6 +22,7 @@ int main(int argc, char *argv[])
 	game.columns = 10;
 	game.score = 0;
 	game.level = 1;
+	
 	int renderMap[game.rows][game.columns];
 	
 	tetrisGetNextBlock (pointGame);
@@ -252,7 +253,20 @@ int main(int argc, char *argv[])
 		//SDL_RenderPresent(rend);
 		
 		/* Neue Texturen auf die Map */
-		tetrisDrawRenderMap(pointGame, **renderMap);
+		for (int x = 0; x < game.columns; x++){
+			for (int y = 0; y < game.rows; y++){
+				renderMap[y][x] = game.map[y][x];
+			}
+		}
+		
+		for (int i = 0; i < 4; i++){
+			int checkX = tetrisGetArrayInfo(game.falling.type, game.falling.orientation, i).x + game.falling.pos.x;
+			int checkY = tetrisGetArrayInfo(game.falling.type, game.falling.orientation, i).y + game.falling.pos.y;
+			renderMap[checkY][checkX] = game.falling.type + 1;
+		}
+		
+		
+		
 		for (int x = 0; x < game.columns; x++)
 		{
 			for (int y = 0; y < game.rows; y++)
