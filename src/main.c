@@ -163,6 +163,11 @@ int main(int argc, char *argv[])
 	int down = 0;
 	int left = 0;
 	int right = 0;
+	int ButtonQ = 0;
+	int ButtonE = 0;
+	int Gravity = 0;
+	int Level = 1;
+	int delay = 0;
 	
 	// Schliessen auf false (0)
 	int running = 1;
@@ -209,6 +214,12 @@ int main(int argc, char *argv[])
 						case SDL_SCANCODE_RIGHT:
 							right = 1;
 							break;
+						case SDL_SCANCODE_Q:
+							ButtonQ = 1;
+							break;
+						case SDL_SCANCODE_E:
+							ButtonE = 1;
+							break;
 						default:
 							break;
 					}
@@ -234,6 +245,12 @@ int main(int argc, char *argv[])
 						case SDL_SCANCODE_RIGHT:
 							right = 0;
 							break;
+						case SDL_SCANCODE_Q:
+							ButtonQ = 0;
+							break;
+						case SDL_SCANCODE_E:
+							ButtonE = 0;
+							break;
 						default:
 							break;
 					}
@@ -246,17 +263,36 @@ int main(int argc, char *argv[])
 		if (down && !up) 
 		{
 			tetrisApplyGravity(pointGame);
+			delay = 1;
 		}
 		
 		if (left && !right) 
 		{
 			tetrisMoveLeft(pointGame);
+			delay = 1;
 		}
 		
 		if (right && !left) 
 		{
 			tetrisMoveRight(pointGame);
-		}	// Ende
+			delay = 1;
+		}	
+		if (ButtonE)
+		{
+			tetrisTurnBlock(pointGame);
+			delay = 1;
+		}
+		if (ButtonQ)
+		{
+			// TurnBlock left
+		}
+		
+		/* Gravity */
+		if (Gravity >= FPS)
+		{
+			tetrisApplyGravity(pointGame);
+			Gravity = 0;
+		}
 
 		
 		// Leere das Fenster
@@ -348,10 +384,18 @@ int main(int argc, char *argv[])
 		}
 		SDL_RenderPresent(rend);
 				
-				
-		// Fps
-		SDL_Delay(1000/FPS);
 		
+		/* On every Frame */
+		SDL_Delay(1000/FPS);
+		Gravity+= Level;
+		
+		if (delay)
+		{
+			/*
+			SDL_Delay((12/12*FPS)*(1000/FPS));
+			delay = 0;
+			*/
+		}
 		
 	} /* Animation Ende */
 	
