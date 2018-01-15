@@ -38,6 +38,14 @@ int main(int argc, char *argv[])
 			game.map[x][y] = 0;
 		}
 	}
+	
+	for (int x = 0; x < game.columns; x++) 
+	{
+		for (int y = 0; y < game.rows; y++) 
+		{
+			renderMap[x][y] = 0;
+		}
+	}
 		
 	
 
