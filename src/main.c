@@ -14,6 +14,8 @@
 
 int main(int argc, char *argv[])
 {
+	// Pixels per Block
+	int PpB = RESOLUTION_HEIGHT / 25;
 	
 	tetrisGame game;
 	tetrisGame* pointGame;
@@ -37,6 +39,7 @@ int main(int argc, char *argv[])
 		}
 	}
 		
+	
 
 	/* Anfang Basic Framework */
 	if (SDL_Init( SDL_INIT_VIDEO|SDL_INIT_TIMER ) < 0)
@@ -235,6 +238,7 @@ int main(int argc, char *argv[])
 
 		// Ende
 		
+		/*
 		// Positions Update
 		x_pos += x_vel / FPS;
 		y_pos += y_vel / FPS;
@@ -245,9 +249,14 @@ int main(int argc, char *argv[])
 		if (x_pos >= RESOLUTION_WIDTH - dest.w) x_pos = RESOLUTION_WIDTH - dest.w;
 		if (y_pos >= RESOLUTION_HEIGHT - dest.h) y_pos = RESOLUTION_HEIGHT - dest.h;
 		
-		// Positionen der Struct
+		// Positionen der Struct 
+		
 		dest.y = (int) y_pos;
 		dest.x = (int) x_pos;
+		*/
+		
+		dest.x = (game.falling.pos.x * PpB) + (RESOLUTION_WIDTH /2) - (5 * PpB);
+		dest.y = (game.falling.pos.y * PpB);
 		
 		// Leere das Fenster
 		SDL_RenderClear(rend);
