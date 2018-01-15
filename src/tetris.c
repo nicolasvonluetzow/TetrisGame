@@ -39,7 +39,7 @@ position blockTypes[7][4][4] = {
 	{{0,1}, {1,1}, {1,0}, {2,0}},
 	{{0,0}, {0,1}, {1,1}, {1,2}},
 	{{0,1}, {1,1}, {1,0}, {2,0}}}
-};55
+};
 	
 //Puts the next Block as the falling block and generates a new next Block.
 void tetrisGetNextBlock (tetrisGame *game){
@@ -131,7 +131,7 @@ void tetrisAddToMap (tetrisGame *game){
 	tetrisGetNextBlock(game);
 }
 
-void example(tetrisGame *game, int *renderMap){
+void tetrisDrawRenderMap(tetrisGame *game, int **renderMap){
 	
 	for (int x = 0; x < game->columns; x++){
 		for (int y = 0; y < game->rows; y++){
