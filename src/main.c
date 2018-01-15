@@ -2,6 +2,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_mixer.h>
 #include "tetris.h"
 
 #define RESOLUTION_WIDTH 1280
@@ -50,7 +51,7 @@ int main(int argc, char *argv[])
 	
 
 	/* Anfang Basic Framework */
-	if (SDL_Init( SDL_INIT_VIDEO|SDL_INIT_TIMER ) < 0)
+	if (SDL_Init( SDL_INIT_VIDEO| SDL_INIT_AUDIO | SDL_INIT_TIMER ) < 0)
 	{
 		printf("Fehler beim Initialisierungsprozesses von SDL: %s\n", SDL_GetError());
 		return 1;
@@ -79,7 +80,6 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 	
-	SDL_Surface* surface = IMG_Load("textures/BlockZ.png");
 	SDL_Surface* BlockI = IMG_Load("textures/Tex1.png");
 	SDL_Surface* BlockL = IMG_Load("textures/Tex2.png");
 	SDL_Surface* BlockJ = IMG_Load("textures/Tex3.png");
@@ -87,9 +87,12 @@ int main(int argc, char *argv[])
 	SDL_Surface* BlockS = IMG_Load("textures/Tex5.png");
 	SDL_Surface* BlockT = IMG_Load("textures/Tex6.png");
 	SDL_Surface* BlockZ = IMG_Load("textures/Tex7.png");
+	SDL_Surface* Edges = IMG_Load("textures/Edges.png");
+	SDL_Surface* BackgroundImage = IMG_Load("textures/Background.jpg");
 	
 	
-	if (!(surface || BlockI || BlockL || BlockJ || BlockO || BlockS || BlockT || BlockZ))
+	
+	if (!(BlockI || BlockL || BlockJ || BlockO || BlockS || BlockT || BlockZ || Edges || BackgroundImage))
 	{
 		printf("Fehler beim Initialisieren von mindestens einer der Oberflaechen: %s\n", SDL_GetError());
 		SDL_DestroyRenderer(rend);
@@ -98,7 +101,6 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 	
-	SDL_Texture* tex = SDL_CreateTextureFromSurface(rend, surface);
 	SDL_Texture* texBlockI = SDL_CreateTextureFromSurface(rend, BlockI);
 	SDL_Texture* texBlockL = SDL_CreateTextureFromSurface(rend, BlockL);
 	SDL_Texture* texBlockJ = SDL_CreateTextureFromSurface(rend, BlockJ);
@@ -106,7 +108,8 @@ int main(int argc, char *argv[])
 	SDL_Texture* texBlockS = SDL_CreateTextureFromSurface(rend, BlockS);
 	SDL_Texture* texBlockT = SDL_CreateTextureFromSurface(rend, BlockT);
 	SDL_Texture* texBlockZ = SDL_CreateTextureFromSurface(rend, BlockZ);
-	SDL_FreeSurface(surface);
+	SDL_Texture* texEdges = SDL_CreateTextureFromSurface(rend, Edges);
+	SDL_Texture* texBackgroundImage = SDL_CreateTextureFromSurface(rend, BackgroundImage);
 	SDL_FreeSurface(BlockI);
 	SDL_FreeSurface(BlockL);
 	SDL_FreeSurface(BlockJ);
@@ -114,9 +117,11 @@ int main(int argc, char *argv[])
 	SDL_FreeSurface(BlockS);
 	SDL_FreeSurface(BlockT);
 	SDL_FreeSurface(BlockZ);
+	SDL_FreeSurface(Edges);
+	SDL_FreeSurface(BackgroundImage);
 	
 	/* Fehlercode an die neuen Texturen anpassen */
-	if (!tex)
+	if (!(texBlockI || texBlockL || texBlockJ || texBlockS || texBlockT || texBlockO || texBlockZ || texEdges || texBackgroundImage))
 	{
 		printf("Fehler beim Erstellen der Textur: %s\n", SDL_GetError());
 		SDL_DestroyRenderer(rend);
@@ -126,10 +131,13 @@ int main(int argc, char *argv[])
 	}
 	/* Ende Basic Framework */
 	
+	/* Music */
+	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+	Mix_Music* BackgroundMusic = Mix_LoadMUS("music/BackgroundMusic.mp3");
+	Mix_PlayMusic(BackgroundMusic, -1);
 	
 	
 	//Struct der Position und Groesse des Sprites
-	SDL_Rect dest;
 	SDL_Rect RBlockI;
 	SDL_Rect RBlockL;
 	SDL_Rect RBlockJ;
@@ -137,9 +145,10 @@ int main(int argc, char *argv[])
 	SDL_Rect RBlockS;
 	SDL_Rect RBlockT;
 	SDL_Rect RBlockZ;
+	SDL_Rect REdges;
+	
 	
 	//Dimension der Textur
-	SDL_QueryTexture(tex, NULL, NULL, &dest.w, &dest.h);
 	SDL_QueryTexture(texBlockI, NULL, NULL, &RBlockI.w, &RBlockI.h);
 	SDL_QueryTexture(texBlockL, NULL, NULL, &RBlockL.w, &RBlockL.h);
 	SDL_QueryTexture(texBlockJ, NULL, NULL, &RBlockJ.w, &RBlockJ.h);
@@ -147,6 +156,7 @@ int main(int argc, char *argv[])
 	SDL_QueryTexture(texBlockS, NULL, NULL, &RBlockS.w, &RBlockS.h);
 	SDL_QueryTexture(texBlockT, NULL, NULL, &RBlockT.w, &RBlockT.h);
 	SDL_QueryTexture(texBlockZ, NULL, NULL, &RBlockZ.w, &RBlockZ.h);
+	SDL_QueryTexture(texEdges, NULL, NULL, &REdges.w, &REdges.h);
 	
 	// Bewegungsrichtungen
 	int up = 0;
@@ -247,18 +257,10 @@ int main(int argc, char *argv[])
 		{
 			tetrisMoveRight(pointGame);
 		}	// Ende
-		
-		/*
-		dest.x = (game.falling.pos.x * PpB) + (RESOLUTION_WIDTH /2) - (5 * PpB);
-		dest.y = (game.falling.pos.y * PpB);
-		*/
+
 		
 		// Leere das Fenster
 		SDL_RenderClear(rend);
-		
-		// Zeichne das Bild ins Fenster
-		//SDL_RenderCopy(rend, tex, NULL, &dest);
-		//SDL_RenderPresent(rend);
 		
 		/* Neue Texturen auf die Map */
 		for (int x = 0; x < game.columns; x++){
@@ -273,8 +275,38 @@ int main(int argc, char *argv[])
 			renderMap[checkY][checkX] = game.falling.type + 1;
 		}
 		
+		/* Background */
+		SDL_RenderCopy(rend, texBackgroundImage, NULL, NULL);
 		
 		
+		/* Edges Start */
+		for (int y = 0; y < game.rows; y++)
+		{ 
+			REdges.x = -1 * PpB + (RESOLUTION_WIDTH/2) - 5*PpB;
+			REdges.y = y * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texEdges, NULL, &REdges);
+		}
+		for (int y = 0; y < game.rows; y++)
+		{ 
+			REdges.x = game.columns * PpB + (RESOLUTION_WIDTH/2) - 5*PpB;
+			REdges.y = y * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texEdges, NULL, &REdges);
+		}
+		for (int x = -1; x < (game.columns + 1); x++)
+		{ 
+			REdges.x = x * PpB + (RESOLUTION_WIDTH/2) - 5*PpB;
+			REdges.y = -1 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texEdges, NULL, &REdges);
+		}
+		for (int x = -1; x < (game.columns + 1); x++)
+		{ 
+			REdges.x = x * PpB + (RESOLUTION_WIDTH/2) - 5*PpB;
+			REdges.y = game.rows * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texEdges, NULL, &REdges);
+		}
+		/* Edges Ende */
+		
+			
 		for (int x = 0; x < game.columns; x++)
 		{
 			for (int y = 0; y < game.rows; y++)
@@ -283,31 +315,31 @@ int main(int argc, char *argv[])
 				{
 					case 0: break;
 					case 1: RBlockI.x = x * PpB + (RESOLUTION_WIDTH/2) - 5*PpB;
-							RBlockI.y = y * PpB;
+							RBlockI.y = y * PpB + 3*PpB;
 								SDL_RenderCopy(rend, texBlockI, NULL, &RBlockI);
 							break;
 					case 2: RBlockL.x = x * PpB + (RESOLUTION_WIDTH/2) - 5*PpB;
-							RBlockL.y = y * PpB;
+							RBlockL.y = y * PpB + 3*PpB;
 								SDL_RenderCopy(rend, texBlockL, NULL, &RBlockL);
 							break;
 					case 3: RBlockJ.x = x * PpB + (RESOLUTION_WIDTH/2) - 5*PpB;
-							RBlockJ.y = y * PpB;
+							RBlockJ.y = y * PpB + 3*PpB;
 								SDL_RenderCopy(rend, texBlockJ, NULL, &RBlockJ);
 							break;
 					case 4: RBlockS.x = x * PpB + (RESOLUTION_WIDTH/2) - 5*PpB;
-							RBlockS.y = y * PpB;
+							RBlockS.y = y * PpB + 3*PpB;
 								SDL_RenderCopy(rend, texBlockS, NULL, &RBlockS);
 							break;
 					case 5: RBlockT.x = x * PpB + (RESOLUTION_WIDTH/2) - 5*PpB;
-							RBlockT.y = y * PpB;
+							RBlockT.y = y * PpB + 3*PpB;
 								SDL_RenderCopy(rend, texBlockT, NULL, &RBlockT);
 							break;
 					case 6: RBlockO.x = x * PpB + (RESOLUTION_WIDTH/2) - 5*PpB;
-							RBlockO.y = y * PpB;
+							RBlockO.y = y * PpB + 3*PpB;
 								SDL_RenderCopy(rend, texBlockO, NULL, &RBlockO);
 							break;
 					case 7: RBlockZ.x = x * PpB + (RESOLUTION_WIDTH/2) - 5*PpB;
-							RBlockZ.y = y * PpB;
+							RBlockZ.y = y * PpB + 3*PpB;
 								SDL_RenderCopy(rend, texBlockZ, NULL, &RBlockZ);
 							break;
 					default: break;
@@ -324,7 +356,6 @@ int main(int argc, char *argv[])
 	} /* Animation Ende */
 	
 	/* Resourcen schliessen */
-	SDL_DestroyTexture(tex);
 	SDL_DestroyTexture(texBlockI);
 	SDL_DestroyTexture(texBlockL);
 	SDL_DestroyTexture(texBlockJ);
@@ -332,6 +363,8 @@ int main(int argc, char *argv[])
 	SDL_DestroyTexture(texBlockT);
 	SDL_DestroyTexture(texBlockO);
 	SDL_DestroyTexture(texBlockZ);
+	SDL_DestroyTexture(texEdges);
+	SDL_DestroyTexture(texBackgroundImage);
 	SDL_DestroyRenderer(rend);
 	SDL_DestroyWindow(win);
 	SDL_Quit();
