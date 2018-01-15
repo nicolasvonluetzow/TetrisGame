@@ -11,6 +11,7 @@
 // Geschwindigkeit ueber den Bildschirm in Pixel/Sekunde
 #define SPEED 300
 
+//int renderMap[game.rows][game.columns];
 
 int main(int argc, char *argv[])
 {
@@ -20,7 +21,7 @@ int main(int argc, char *argv[])
 	tetrisGame game;
 	tetrisGame* pointGame;
 	pointGame = &game;
-	game.rows = 10;
+	game.rows = 20;
 	game.columns = 10;
 	game.score = 0;
 	game.level = 1;

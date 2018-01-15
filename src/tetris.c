@@ -39,7 +39,7 @@ position blockTypes[7][4][4] = {
 	{{0,1}, {1,1}, {1,0}, {2,0}},
 	{{0,0}, {0,1}, {1,1}, {1,2}},
 	{{0,1}, {1,1}, {1,0}, {2,0}}}
-};
+};55
 	
 //Puts the next Block as the falling block and generates a new next Block.
 void tetrisGetNextBlock (tetrisGame *game){
@@ -69,7 +69,7 @@ void tetrisApplyGravity (tetrisGame *game){
 			for (int i = 0; i < 4; i++){
 				int checkX = blockTypes[game->falling.type][game->falling.orientation][i].x + game->falling.pos.x;
 				int checkY = blockTypes[game->falling.type][game->falling.orientation][i].y + game->falling.pos.y;
-				if(game->map[checkY][checkX] != 0 || checkY > game->rows){
+				if(checkY == game->rows || game->map[checkY][checkX] != 0){
 					viable = false;
 				}
 			}
@@ -131,8 +131,8 @@ void tetrisAddToMap (tetrisGame *game){
 	tetrisGetNextBlock(game);
 }
 
-void example(tetrisGame *game){
-	int renderMap[game->rows][game->columns];
+void example(tetrisGame *game, int *renderMap){
+	
 	for (int x = 0; x < game->columns; x++){
 		for (int y = 0; y < game->rows; y++){
 			renderMap[y][x] = game->map[y][x];
