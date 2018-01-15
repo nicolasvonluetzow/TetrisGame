@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
 	{
 		for (int y = 0; y < game.rows; y++) 
 		{
-			game.map[x][y] = 0;
+			game.map[y][x] = 0;
 		}
 	}
 	
@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
 	{
 		for (int y = 0; y < game.rows; y++) 
 		{
-			renderMap[x][y] = 0;
+			renderMap[y][x] = 0;
 		}
 	}
 		
