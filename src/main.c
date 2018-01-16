@@ -7,7 +7,7 @@
 
 #define RESOLUTION_WIDTH 1280
 #define RESOLUTION_HEIGHT 720
-#define FPS 10
+#define FPS 60
 // Locktime in seconds
 #define LOCKTIME (8/12)
 
