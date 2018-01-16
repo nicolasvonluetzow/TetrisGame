@@ -7,7 +7,9 @@
 
 #define RESOLUTION_WIDTH 1280
 #define RESOLUTION_HEIGHT 720
-#define FPS 60
+#define FPS 10
+// Locktime in seconds
+#define LOCKTIME (8/12)
 
 //int renderMap[game.rows][game.columns];
 
@@ -160,12 +162,12 @@ int main(int argc, char *argv[])
 	int up = 0;
 	int down = 0;
 	int left = 0;
+	int leftlock = LOCKTIME * FPS;
 	int right = 0;
 	int ButtonQ = 0;
 	int ButtonE = 0;
 	int Gravity = 0;
 	int Level = 1;
-	int delay = 0;
 	
 	// Schliessen auf false (0)
 	int running = 1;
@@ -258,33 +260,31 @@ int main(int argc, char *argv[])
 		
 		
 	/*	if (up && !down) */
-		if (down && !up) 
+		if (down && !up)
 		{
 			tetrisApplyGravity(pointGame);
-			delay = 1;
 		}
 		
-		if (left && !right) 
+		if ((left && !right) && (leftlock == (LOCKTIME * FPS))) 
 		{
 			tetrisMoveLeft(pointGame);
-			delay = 1;
+			leftlock = 0;
 		}
 		
 		if (right && !left) 
 		{
 			tetrisMoveRight(pointGame);
-			delay = 1;
 		}	
 		if (ButtonE)
 		{
 			tetrisTurnBlockRight(pointGame);
-			delay = 1;
 		}
 		if (ButtonQ)
 		{
 			tetrisTurnBlockLeft(pointGame);
 		}
-		
+
+	
 		/* Gravity */
 		if (Gravity >= FPS)
 		{
@@ -380,22 +380,20 @@ int main(int argc, char *argv[])
 				} 
 			}
 		}
+		tetrisCheckLines(pointGame);
 		SDL_RenderPresent(rend);
-				
+		
 		
 		/* On every Frame */
 		SDL_Delay(1000/FPS);
 		Gravity+= Level;
-		
-		if (delay)
+		if (leftlock < (LOCKTIME * FPS))
 		{
-			/*
-			SDL_Delay((12/12*FPS)*(1000/FPS));
-			delay = 0;
-			*/
+			leftlock ++;
 		}
+			
 		
-		tetrisCheckLines(pointGame);
+		
 		
 	} /* Animation Ende */
 	
