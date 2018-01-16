@@ -162,7 +162,6 @@ int main(int argc, char *argv[])
 	int up = 0;
 	int down = 0;
 	int left = 0;
-	int leftlock = LOCKTIME * FPS;
 	int right = 0;
 	int ButtonQ = 0;
 	int ButtonE = 0;
@@ -204,6 +203,7 @@ int main(int argc, char *argv[])
 							break;
 						case SDL_SCANCODE_A:
 						case SDL_SCANCODE_LEFT:
+							tetrisMoveLeft(pointGame);
 							left = 1;
 							break;
 						case SDL_SCANCODE_S:
@@ -212,12 +212,15 @@ int main(int argc, char *argv[])
 							break;
 						case SDL_SCANCODE_D:
 						case SDL_SCANCODE_RIGHT:
+							tetrisMoveRight(pointGame);
 							right = 1;
 							break;
 						case SDL_SCANCODE_Q:
+							tetrisTurnBlockLeft(pointGame);
 							ButtonQ = 1;
 							break;
 						case SDL_SCANCODE_E:
+							tetrisTurnBlockRight(pointGame);
 							ButtonE = 1;
 							break;
 						default:
@@ -265,23 +268,22 @@ int main(int argc, char *argv[])
 			tetrisApplyGravity(pointGame);
 		}
 		
-		if ((left && !right) && (leftlock == (LOCKTIME * FPS))) 
+		if (left && !right) 
 		{
-			tetrisMoveLeft(pointGame);
-			leftlock = 0;
+			//tetrisMoveLeft(pointGame);
 		}
 		
 		if (right && !left) 
 		{
-			tetrisMoveRight(pointGame);
+			//tetrisMoveRight(pointGame);
 		}	
 		if (ButtonE)
 		{
-			tetrisTurnBlockRight(pointGame);
+			//tetrisTurnBlockRight(pointGame);
 		}
 		if (ButtonQ)
 		{
-			tetrisTurnBlockLeft(pointGame);
+			//tetrisTurnBlockLeft(pointGame);
 		}
 
 	
@@ -387,10 +389,6 @@ int main(int argc, char *argv[])
 		/* On every Frame */
 		SDL_Delay(1000/FPS);
 		Gravity+= Level;
-		if (leftlock < (LOCKTIME * FPS))
-		{
-			leftlock ++;
-		}
 			
 		
 		
