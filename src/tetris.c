@@ -84,7 +84,7 @@ void tetrisApplyGravity (tetrisGame *game){
 		}
 	}
 	if(!viable){
-		game->falling.pos.y += 1;
+		game->falling.pos.y -= 1;
 		tetrisAddToMap(game);
 	}
 }
@@ -139,6 +139,7 @@ void tetrisAddToMap (tetrisGame *game){
 	tetrisGetNextBlock(game);
 }
 
+//Returns information from the blockTypes Array to be used in other files.
 position tetrisGetArrayInfo(int x, int y, int z){
 	return blockTypes[x][y][z];
 }
