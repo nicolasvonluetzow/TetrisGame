@@ -14,7 +14,7 @@ typedef struct {
 //TetrisGame contains all relevant information about the game.
 typedef struct {
 	int rows, columns, score, level;
-	int map[20][10];
+	short map[20][10];
 	block falling, next;
 } tetrisGame;
 

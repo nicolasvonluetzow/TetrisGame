@@ -58,6 +58,21 @@ void tetrisGetNextBlock (tetrisGame *game){
 //Turns a Block clockwise.
 void tetrisTurnBlockRight (tetrisGame *game){
 	game->falling.orientation = (game->falling.orientation + 1) % 4;
+	bool viable = true;
+	for (int x = 0; x < game->columns; x++){
+		for (int y = 0; y < game->rows; y++){
+			for (int i = 0; i < 4; i++){
+				int checkX = blockTypes[game->falling.type][game->falling.orientation][i].x + game->falling.pos.x;
+				int checkY = blockTypes[game->falling.type][game->falling.orientation][i].y + game->falling.pos.y;
+				if(checkY == game->rows || checkY < 0 || checkX < 0 || checkX == game->columns || game->map[checkY][checkX] != 0){
+					viable = false;
+				}
+			}
+		}
+	}
+	if(!viable){
+		game->falling.pos.x -= 1;
+	}
 }
 
 //Turns a Block counterclockwise.
@@ -65,6 +80,21 @@ void tetrisTurnBlockLeft (tetrisGame *game){
 	game->falling.orientation -= 1;
 	if(game->falling.orientation < 0){
 		game->falling.orientation = 3;
+	}
+	bool viable = true;
+	for (int x = 0; x < game->columns; x++){
+		for (int y = 0; y < game->rows; y++){
+			for (int i = 0; i < 4; i++){
+				int checkX = blockTypes[game->falling.type][game->falling.orientation][i].x + game->falling.pos.x;
+				int checkY = blockTypes[game->falling.type][game->falling.orientation][i].y + game->falling.pos.y;
+				if(checkY == game->rows || checkY < 0 || checkX < 0 || checkX == game->columns || game->map[checkY][checkX] != 0){
+					viable = false;
+				}
+			}
+		}
+	}
+	if(!viable){
+		game->falling.pos.x -= 1;
 	}
 }
 
