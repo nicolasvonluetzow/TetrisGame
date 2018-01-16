@@ -14,12 +14,12 @@ position blockTypes[7][4][4] = {
 	{{0,0}, {1,0}, {2,0}, {0,1}},
 	{{0,0}, {0,1}, {0,2}, {1,2}},
 	{{0,1}, {1,1}, {2,1}, {2,0}}},
-	{ // L reverse
+	{ // J
 	{{0,2}, {1,0}, {1,1}, {1,2}},
 	{{0,0}, {1,0}, {2,0}, {2,1}},
 	{{0,0}, {0,1}, {0,2}, {1,0}},
 	{{0,0}, {0,1}, {1,1}, {2,1}}},
-	{ // 2x2
+	{ // O
 	{{0,0}, {1,0}, {0,1}, {1,1}},
 	{{0,0}, {1,0}, {0,1}, {1,1}},
 	{{0,0}, {1,0}, {0,1}, {1,1}},
@@ -29,12 +29,12 @@ position blockTypes[7][4][4] = {
 	{{0,0}, {1,0}, {1,1}, {2,1}},
 	{{1,0}, {0,1}, {1,1}, {0,2}},
 	{{0,0}, {1,0}, {1,1}, {2,1}}},
-	{ // T umgedreht
+	{ // T
 	{{1,0}, {0,1}, {1,1}, {1,2}},
 	{{0,0}, {1,0}, {2,0}, {1,1}},
 	{{0,0}, {0,1}, {0,2}, {1,1}},
 	{{0,1}, {1,1}, {2,1}, {1,0}}},
-	{ // S reverse
+	{ // Z
 	{{0,0}, {0,1}, {1,1}, {1,2}},
 	{{0,1}, {1,1}, {1,0}, {2,0}},
 	{{0,0}, {0,1}, {1,1}, {1,2}},
@@ -137,6 +137,29 @@ void tetrisAddToMap (tetrisGame *game){
 		game->map[checkY][checkX] = game->falling.type + 1;
 	}
 	tetrisGetNextBlock(game);
+}
+
+void tetrisCheckLines (tetrisGame *game){
+	int viableLines = 0;
+	for(int y = 0; y < game->rows; y++){
+		bool viable = true;
+		for(int x = 0; x < game->columns; x++){
+			if(game->map[y][x] == 0){
+				viable = false;
+			}
+		}
+		if(viable){
+			viableLines += 1;
+			for (int x = 0; x < game->columns; x++){
+				game->map[y][x] = 0;
+			}	
+			for (int y2 = y; y2 > 0; y2--){
+				for (int x = 0; x < game->columns; x++){
+					game->map[y2][x] = game->map[y2-1][x];
+				}
+			}
+		}
+	}
 }
 
 //Returns information from the blockTypes Array to be used in other files.

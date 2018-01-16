@@ -26,4 +26,5 @@ void tetrisApplyGravity (tetrisGame *game);
 void tetrisMoveLeft (tetrisGame *game);
 void tetrisMoveRight (tetrisGame *game);
 void tetrisAddToMap (tetrisGame *game);
+void tetrisCheckLines (tetrisGame *game);
 position tetrisGetArrayInfo(int x, int y, int z);

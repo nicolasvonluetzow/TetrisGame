@@ -395,6 +395,8 @@ int main(int argc, char *argv[])
 			*/
 		}
 		
+		tetrisCheckLines(pointGame);
+		
 	} /* Animation Ende */
 	
 	/* Resourcen schliessen */
