@@ -29,8 +29,6 @@ int main(int argc, char *argv[])
 	tetrisGetNextBlock (pointGame);
 	tetrisGetNextBlock (pointGame);
 	
-	tetrisTurnBlock (pointGame);
-	
 	/* Init map */
 	for (int x = 0; x < game.columns; x++) 
 	{
@@ -279,12 +277,12 @@ int main(int argc, char *argv[])
 		}	
 		if (ButtonE)
 		{
-			tetrisTurnBlock(pointGame);
+			tetrisTurnBlockRight(pointGame);
 			delay = 1;
 		}
 		if (ButtonQ)
 		{
-			// TurnBlock left
+			tetrisTurnBlockLeft(pointGame);
 		}
 		
 		/* Gravity */

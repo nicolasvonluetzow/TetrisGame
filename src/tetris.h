@@ -20,7 +20,8 @@ typedef struct {
 
 //Function declarations (explained when used)
 void tetrisGetNextBlock (tetrisGame *game);
-void tetrisTurnBlock (tetrisGame *game);
+void tetrisTurnBlockRight (tetrisGame *game);
+void tetrisTurnBlockLeft (tetrisGame *game);
 void tetrisApplyGravity (tetrisGame *game);
 void tetrisMoveLeft (tetrisGame *game);
 void tetrisMoveRight (tetrisGame *game);

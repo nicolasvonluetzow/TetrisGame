@@ -56,8 +56,16 @@ void tetrisGetNextBlock (tetrisGame *game){
 }
 
 //Turns a Block clockwise.
-void tetrisTurnBlock (tetrisGame *game){
+void tetrisTurnBlockRight (tetrisGame *game){
 	game->falling.orientation = (game->falling.orientation + 1) % 4;
+}
+
+//Turns a Block counterclockwise.
+void tetrisTurnBlockLeft (tetrisGame *game){
+	game->falling.orientation -= 1;
+	if(game->falling.orientation < 0){
+		game->falling.orientation = 3;
+	}
 }
 
 //Applies gravity once. Not to be called every tick.
