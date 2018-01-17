@@ -8,10 +8,6 @@
 #define RESOLUTION_WIDTH 1280
 #define RESOLUTION_HEIGHT 720
 #define FPS 60
-// Locktime in seconds
-#define LOCKTIME (8/12)
-
-//int renderMap[game.rows][game.columns];
 
 int main(int argc, char *argv[])
 {
@@ -80,13 +76,13 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 	
-	SDL_Surface* BlockI = IMG_Load("textures/Tex1.png");
-	SDL_Surface* BlockL = IMG_Load("textures/Tex2.png");
-	SDL_Surface* BlockJ = IMG_Load("textures/Tex3.png");
-	SDL_Surface* BlockO = IMG_Load("textures/Tex4.png");
-	SDL_Surface* BlockS = IMG_Load("textures/Tex5.png");
-	SDL_Surface* BlockT = IMG_Load("textures/Tex6.png");
-	SDL_Surface* BlockZ = IMG_Load("textures/Tex7.png");
+	SDL_Surface* BlockI = IMG_Load("textures/TexBlockI.png");
+	SDL_Surface* BlockL = IMG_Load("textures/TexBlockL.png");
+	SDL_Surface* BlockJ = IMG_Load("textures/TexBlockJ.png");
+	SDL_Surface* BlockO = IMG_Load("textures/TexBlockO.png");
+	SDL_Surface* BlockS = IMG_Load("textures/TexBlockS.png");
+	SDL_Surface* BlockT = IMG_Load("textures/TexBlockT.png");
+	SDL_Surface* BlockZ = IMG_Load("textures/TexBlockZ.png");
 	SDL_Surface* Edges = IMG_Load("textures/Edges.png");
 	SDL_Surface* BackgroundImage = IMG_Load("textures/Background.jpg");
 	
@@ -277,13 +273,13 @@ int main(int argc, char *argv[])
 		{
 			//tetrisMoveRight(pointGame);
 		}	
-		if (ButtonE)
-		{
-			//tetrisTurnBlockRight(pointGame);
-		}
 		if (ButtonQ)
 		{
 			//tetrisTurnBlockLeft(pointGame);
+		}
+		if (ButtonE)
+		{
+			//tetrisTurnBlockRight(pointGame);
 		}
 
 	
