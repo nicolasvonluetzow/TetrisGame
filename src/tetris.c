@@ -1,6 +1,7 @@
 #include "tetris.h"
 #include <stdbool.h>
 #include <stdio.h>
+#include <time.h>
 
 //Array contains all BlockTypes and all possible orientation
 position blockTypes[7][4][4] = {
@@ -44,6 +45,10 @@ position blockTypes[7][4][4] = {
 //Puts the next Block as the falling block and generates a new next Block.
 void tetrisGetNextBlock (tetrisGame *game){
 	block nextBlock;
+	
+	time_t timevar;
+	srand((unsigned) time(&timevar));
+	
 	nextBlock.type = rand() % 8;
 	nextBlock.orientation = 0;
 	position posi;
