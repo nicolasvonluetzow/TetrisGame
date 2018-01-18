@@ -21,6 +21,8 @@
 #define RESOLUTION_WIDTH 1280
 #define RESOLUTION_HEIGHT 720
 #define FPS 60
+#define STARTLEVEL 0
+#define MAXLEVEL 20
 
 int main(int argc, char *argv[])
 {
@@ -34,7 +36,7 @@ int main(int argc, char *argv[])
 	game.rows = 20;
 	game.columns = 10;
 	game.score = 0;
-	game.level = 1;
+	game.level = 0;
 	game.lines = 0;
 	block fall;
 	fall.type = 0;
@@ -42,10 +44,19 @@ int main(int argc, char *argv[])
 	block nex;
 	nex.type = 0;
 	game.next = nex;
+	
 	FILE *print;
 	print = fopen("output.txt", "w");
 	
-
+	int *LinesNeeded = (int*) malloc(MAXLEVEL*sizeof(int));
+	for (int i = 0, k = 10; i < MAXLEVEL; i++, k+=10)
+	{
+		LinesNeeded[i] = k;
+	}
+	
+	int* pLinesNeeded = LinesNeeded;
+	for (int i = 0; i < STARTLEVEL; i++, pLinesNeeded++);
+	
 	int renderMap[game.rows][game.columns];
 
 	tetrisGetNextBlock (pointGame);
@@ -179,12 +190,7 @@ int main(int argc, char *argv[])
 	SDL_QueryTexture(texEdges, NULL, NULL, &REdges.w, &REdges.h);
 
 	// Bewegungsrichtungen
-	int up = 0;
 	int down = 0;
-	int left = 0;
-	int right = 0;
-	int ButtonQ = 0;
-	int ButtonE = 0;
 	int Gravity = 0;
 	int oldlines = 0;
 
@@ -216,14 +222,9 @@ int main(int argc, char *argv[])
 						case SDL_SCANCODE_ESCAPE:
 							game.running = false;
 							break;
-						case SDL_SCANCODE_W:
-						case SDL_SCANCODE_UP:
-							up = 1;
-							break;
 						case SDL_SCANCODE_A:
 						case SDL_SCANCODE_LEFT:
 							tetrisMoveLeft(pointGame);
-							left = 1;
 							break;
 						case SDL_SCANCODE_S:
 						case SDL_SCANCODE_DOWN:
@@ -232,15 +233,12 @@ int main(int argc, char *argv[])
 						case SDL_SCANCODE_D:
 						case SDL_SCANCODE_RIGHT:
 							tetrisMoveRight(pointGame);
-							right = 1;
 							break;
 						case SDL_SCANCODE_Q:
 							tetrisTurnBlockLeft(pointGame);
-							ButtonQ = 1;
 							break;
 						case SDL_SCANCODE_E:
 							tetrisTurnBlockRight(pointGame);
-							ButtonE = 1;
 							break;
 						default:
 							break;
@@ -251,58 +249,21 @@ int main(int argc, char *argv[])
 				{
 					switch (event.key.keysym.scancode)
 					{
-						case SDL_SCANCODE_W:
-						case SDL_SCANCODE_UP:
-							up = 0;
-							break;
-						case SDL_SCANCODE_A:
-						case SDL_SCANCODE_LEFT:
-							left = 0;
-							break;
 						case SDL_SCANCODE_S:
 						case SDL_SCANCODE_DOWN:
 							down = 0;
-							break;
-						case SDL_SCANCODE_D:
-						case SDL_SCANCODE_RIGHT:
-							right = 0;
-							break;
-						case SDL_SCANCODE_Q:
-							ButtonQ = 0;
-							break;
-						case SDL_SCANCODE_E:
-							ButtonE = 0;
 							break;
 						default:
 							break;
 					}
 				}
+
 		}
 
 
-
-	/*	if (up && !down) */
-		if (down && !up)
+		if (down)
 		{
 			tetrisApplyGravity(pointGame);
-		}
-
-		if (left && !right)
-		{
-			//tetrisMoveLeft(pointGame);
-		}
-
-		if (right && !left)
-		{
-			//tetrisMoveRight(pointGame);
-		}
-		if (ButtonQ)
-		{
-			//tetrisTurnBlockLeft(pointGame);
-		}
-		if (ButtonE)
-		{
-			//tetrisTurnBlockRight(pointGame);
 		}
 
 
@@ -403,10 +364,19 @@ int main(int argc, char *argv[])
 		}
 		
 		tetrisCheckLines(pointGame);
+		// pointer an tetrisCheckLines() übergeben, hier weiterarbeiten
+		if (game.lines >= (*pLinesNeeded) && ((*pLinesNeeded) < 10*MAXLEVEL))
+		{
+			pLinesNeeded++;
+			int shouldBeLevel = ((*pLinesNeeded - 10) /10);
+			for (; game.level < shouldBeLevel; game.level++);
+		}
+			
 		if (oldlines != game.lines)
 		{
 			fprintf(print, "Lines: %d\n", game.lines);
 			fprintf(print, "Score: %d\n", game.score);
+			fprintf(print, "Level: %d\n\n", game.level);
 		}
 		
 		oldlines = game.lines;
@@ -415,7 +385,7 @@ int main(int argc, char *argv[])
 
 		/* On every Frame */
 		SDL_Delay(1000/FPS);
-		Gravity+= game.level;
+		Gravity+= 2*(game.level + 1);
 
 
 
@@ -435,6 +405,7 @@ int main(int argc, char *argv[])
 	SDL_DestroyRenderer(rend);
 	SDL_DestroyWindow(win);
 	SDL_Quit();
+	free(LinesNeeded);
 	fclose(print);
 	
 	return 0;
