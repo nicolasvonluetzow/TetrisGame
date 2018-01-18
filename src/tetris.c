@@ -49,7 +49,7 @@ void tetrisGetNextBlock (tetrisGame *game){
 	time_t timevar;
 	srand((unsigned) time(&timevar));
 	*/
-	nextBlock.type = rand() % 8;
+	nextBlock.type = rand() % 7;
 	nextBlock.orientation = 0;
 	position posi;
 	posi.x = (game->columns)/2;
