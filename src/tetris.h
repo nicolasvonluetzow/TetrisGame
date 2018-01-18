@@ -1,4 +1,7 @@
 #include <stdlib.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <time.h>
 
 //Position contains x and y coordinates
 typedef struct {
@@ -13,7 +16,8 @@ typedef struct {
 
 //TetrisGame contains all relevant information about the game.
 typedef struct {
-	int rows, columns, score, level;
+	bool running;
+	int rows, columns, score, level, lines;
 	short map[20][10];
 	block falling, next;
 } tetrisGame;

@@ -35,6 +35,16 @@ int main(int argc, char *argv[])
 	game.columns = 10;
 	game.score = 0;
 	game.level = 1;
+	game.lines = 0;
+	block fall;
+	fall.type = 0;
+	game.falling = fall;
+	block nex;
+	nex.type = 0;
+	game.next = nex;
+	FILE *print;
+	print = fopen("output.txt", "w");
+	
 
 	int renderMap[game.rows][game.columns];
 
@@ -57,7 +67,6 @@ int main(int argc, char *argv[])
 			renderMap[y][x] = 0;
 		}
 	}
-
 
 
 	/* Anfang Basic Framework */
@@ -89,6 +98,7 @@ int main(int argc, char *argv[])
 		SDL_Quit();
 		return 1;
 	}
+
 
 	SDL_Surface* BlockI = IMG_Load("textures/TexBlockI.png");
 	SDL_Surface* BlockL = IMG_Load("textures/TexBlockL.png");
@@ -176,10 +186,7 @@ int main(int argc, char *argv[])
 	int ButtonQ = 0;
 	int ButtonE = 0;
 	int Gravity = 0;
-	int Level = 1;
-
-	// Schliessen auf false (0)
-	int running = 1;
+	int oldlines = 0;
 
 	/*  // Controller
 	SDL_Joystick* joystick = SDL_JoystickOpen(0);
@@ -188,16 +195,18 @@ int main(int argc, char *argv[])
 	printf("Num Axes: %d\n", SDL_JoystickNumAxes(joystick));
 	printf("Num Buttons: %d\n", SDL_JoystickNumButtons(joystick));
 	*/
+	
+	game.running = true;
 
 	/* Animation */
-	while (running)
+	while (game.running)
 	{
 		SDL_Event event;
 		while (SDL_PollEvent(&event))
 		{
 				if (event.type == SDL_QUIT)
 				{
-					running = 0;
+					game.running = false;
 				}
 
 				else if (event.type == SDL_KEYDOWN)
@@ -205,7 +214,7 @@ int main(int argc, char *argv[])
 					switch (event.key.keysym.scancode)
 					{
 						case SDL_SCANCODE_ESCAPE:
-							running = 0;
+							game.running = false;
 							break;
 						case SDL_SCANCODE_W:
 						case SDL_SCANCODE_UP:
@@ -301,7 +310,7 @@ int main(int argc, char *argv[])
 		if (Gravity >= FPS)
 		{
 			tetrisApplyGravity(pointGame);
-			Gravity = 0;
+			Gravity -= FPS;
 		}
 
 
@@ -392,13 +401,21 @@ int main(int argc, char *argv[])
 				}
 			}
 		}
+		
 		tetrisCheckLines(pointGame);
+		if (oldlines != game.lines)
+		{
+			fprintf(print, "Lines: %d\n", game.lines);
+			fprintf(print, "Score: %d\n", game.score);
+		}
+		
+		oldlines = game.lines;
 		SDL_RenderPresent(rend);
 
 
 		/* On every Frame */
 		SDL_Delay(1000/FPS);
-		Gravity+= Level;
+		Gravity+= game.level;
 
 
 
@@ -418,6 +435,7 @@ int main(int argc, char *argv[])
 	SDL_DestroyRenderer(rend);
 	SDL_DestroyWindow(win);
 	SDL_Quit();
-
+	fclose(print);
+	
 	return 0;
 }

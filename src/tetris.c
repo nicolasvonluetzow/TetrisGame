@@ -1,15 +1,12 @@
 #include "tetris.h"
-#include <stdbool.h>
-#include <stdio.h>
-#include <time.h>
 
 //Array contains all BlockTypes and all possible orientation
 position blockTypes[7][4][4] = {
 	{ // I
-	{{0,0}, {0,1}, {0,2}, {0,3}},
-	{{0,0}, {1,0}, {2,0}, {3,0}},
-	{{0,0}, {0,1}, {0,2}, {0,3}},
-	{{0,0}, {1,0}, {2,0}, {3,0}}},
+	{{1,0}, {1,1}, {1,2}, {1,3}},
+	{{0,1}, {1,1}, {2,1}, {3,1}},
+	{{1,0}, {1,1}, {1,2}, {1,3}},
+	{{0,1}, {1,1}, {2,1}, {3,1}}},
 	{ // L
 	{{0,0}, {1,0}, {1,1}, {1,2}},
 	{{0,0}, {1,0}, {2,0}, {0,1}},
@@ -54,6 +51,24 @@ void tetrisGetNextBlock (tetrisGame *game){
 	
 	game->falling = game->next;
 	game->next = nextBlock;
+	
+	if(game->falling.type != 0){
+		bool viable = true;
+		for (int x = 0; x < game->columns; x++){
+			for (int y = 0; y < 5; y++){
+				for (int i = 0; i < 4; i++){
+					int checkX = blockTypes[game->falling.type][game->falling.orientation][i].x + game->falling.pos.x;
+					int checkY = blockTypes[game->falling.type][game->falling.orientation][i].y + game->falling.pos.y;
+					if(game->map[checkY][checkX] != 0){
+						viable = false;
+					}
+				}
+			}
+		}
+		if(!viable){
+			game->running = false;
+		}
+	}
 }
 
 //Turns a Block clockwise.
@@ -72,7 +87,10 @@ void tetrisTurnBlockRight (tetrisGame *game){
 		}
 	}
 	if(!viable){
-		game->falling.pos.x -= 1;
+		game->falling.orientation -= 1;
+		if(game->falling.orientation < 0){
+			game->falling.orientation = 3;
+		}
 	}
 }
 
@@ -95,7 +113,7 @@ void tetrisTurnBlockLeft (tetrisGame *game){
 		}
 	}
 	if(!viable){
-		game->falling.pos.x -= 1;
+		game->falling.orientation = (game->falling.orientation + 1) % 4;
 	}
 }
 
@@ -191,6 +209,22 @@ void tetrisCheckLines (tetrisGame *game){
 			}
 		}
 	}
+	
+	if (viableLines == 1) {
+			game->score += 40 * (game->level + 1);
+	}
+	if (viableLines == 2) {
+			game->score += 100 * (game->level + 1);
+	}
+	if (viableLines == 3) {
+			game->score += 300 * (game->level + 1);
+	}
+	if (viableLines == 4) {
+			game->score += 1200 * (game->level + 1);
+	}
+	
+	
+	game->lines += viableLines;
 }
 
 //Returns information from the blockTypes Array to be used in other files.
