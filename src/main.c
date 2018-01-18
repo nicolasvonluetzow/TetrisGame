@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 {
 	// Pixels per Block
 	int PpB = RESOLUTION_HEIGHT / 25;
-	srand(time(NULL));
+	// srand(time(NULL));
 
 	tetrisGame game;
 	tetrisGame* pointGame;
