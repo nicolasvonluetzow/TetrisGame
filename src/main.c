@@ -25,6 +25,18 @@
 #define STARTLEVEL 0
 #define MAXLEVEL 20
 
+
+typedef struct 
+{
+	int Stelle_1;
+	int Stelle_2;
+	int Stelle_3;
+	int Stelle_4;
+	int Stelle_5;
+	int Stelle_6;
+} Stellen;
+	
+	
 int main(int argc, char *argv[])
 {
 	// Pixels per Block
@@ -33,6 +45,7 @@ int main(int argc, char *argv[])
 	
 	printf("argc = %d, name of exe: %s\n\n", argc, argv[0]);
 
+	Stellen scoreAusgabe;
 	tetrisGame game;
 	tetrisGame* pointGame;
 	pointGame = &game;
@@ -127,6 +140,16 @@ int main(int argc, char *argv[])
 	SDL_Surface* BlockS = IMG_Load("textures/TexBlockS.png");
 	SDL_Surface* BlockT = IMG_Load("textures/TexBlockT.png");
 	SDL_Surface* BlockZ = IMG_Load("textures/TexBlockZ.png");
+	SDL_Surface* Num0 = IMG_Load("textures/Tex0.png");
+	SDL_Surface* Num1 = IMG_Load("textures/Tex1.png");
+	SDL_Surface* Num2 = IMG_Load("textures/Tex2.png");
+	SDL_Surface* Num3 = IMG_Load("textures/Tex3.png");
+	SDL_Surface* Num4 = IMG_Load("textures/Tex4.png");
+	SDL_Surface* Num5 = IMG_Load("textures/Tex5.png");
+	SDL_Surface* Num6 = IMG_Load("textures/Tex6.png");
+	SDL_Surface* Num7 = IMG_Load("textures/Tex7.png");
+	SDL_Surface* Num8 = IMG_Load("textures/Tex8.png");
+	SDL_Surface* Num9 = IMG_Load("textures/Tex9.png");
 	SDL_Surface* Edges = IMG_Load("textures/Edges.png");
 	SDL_Surface* BackgroundImage = IMG_Load("textures/Background.jpg");
 
@@ -148,6 +171,16 @@ int main(int argc, char *argv[])
 	SDL_Texture* texBlockS = SDL_CreateTextureFromSurface(rend, BlockS);
 	SDL_Texture* texBlockT = SDL_CreateTextureFromSurface(rend, BlockT);
 	SDL_Texture* texBlockZ = SDL_CreateTextureFromSurface(rend, BlockZ);
+	SDL_Texture* texNum0 = SDL_CreateTextureFromSurface(rend, Num0);
+	SDL_Texture* texNum1 = SDL_CreateTextureFromSurface(rend, Num1);
+	SDL_Texture* texNum2 = SDL_CreateTextureFromSurface(rend, Num2);
+	SDL_Texture* texNum3 = SDL_CreateTextureFromSurface(rend, Num3);
+	SDL_Texture* texNum4 = SDL_CreateTextureFromSurface(rend, Num4);
+	SDL_Texture* texNum5 = SDL_CreateTextureFromSurface(rend, Num5);
+	SDL_Texture* texNum6 = SDL_CreateTextureFromSurface(rend, Num6);
+	SDL_Texture* texNum7 = SDL_CreateTextureFromSurface(rend, Num7);
+	SDL_Texture* texNum8 = SDL_CreateTextureFromSurface(rend, Num8);
+	SDL_Texture* texNum9 = SDL_CreateTextureFromSurface(rend, Num9);
 	SDL_Texture* texEdges = SDL_CreateTextureFromSurface(rend, Edges);
 	SDL_Texture* texBackgroundImage = SDL_CreateTextureFromSurface(rend, BackgroundImage);
 	SDL_FreeSurface(BlockI);
@@ -157,6 +190,16 @@ int main(int argc, char *argv[])
 	SDL_FreeSurface(BlockS);
 	SDL_FreeSurface(BlockT);
 	SDL_FreeSurface(BlockZ);
+	SDL_FreeSurface(Num0);
+	SDL_FreeSurface(Num1);
+	SDL_FreeSurface(Num2);
+	SDL_FreeSurface(Num3);
+	SDL_FreeSurface(Num4);
+	SDL_FreeSurface(Num5);
+	SDL_FreeSurface(Num6);
+	SDL_FreeSurface(Num7);
+	SDL_FreeSurface(Num8);
+	SDL_FreeSurface(Num9);
 	SDL_FreeSurface(Edges);
 	SDL_FreeSurface(BackgroundImage);
 
@@ -185,6 +228,16 @@ int main(int argc, char *argv[])
 	SDL_Rect RBlockS;
 	SDL_Rect RBlockT;
 	SDL_Rect RBlockZ;
+	SDL_Rect RNum0;
+	SDL_Rect RNum1;
+	SDL_Rect RNum2;
+	SDL_Rect RNum3;
+	SDL_Rect RNum4;
+	SDL_Rect RNum5;
+	SDL_Rect RNum6;
+	SDL_Rect RNum7;
+	SDL_Rect RNum8;
+	SDL_Rect RNum9;
 	SDL_Rect REdges;
 
 
@@ -196,6 +249,16 @@ int main(int argc, char *argv[])
 	SDL_QueryTexture(texBlockS, NULL, NULL, &RBlockS.w, &RBlockS.h);
 	SDL_QueryTexture(texBlockT, NULL, NULL, &RBlockT.w, &RBlockT.h);
 	SDL_QueryTexture(texBlockZ, NULL, NULL, &RBlockZ.w, &RBlockZ.h);
+	SDL_QueryTexture(texNum0, NULL, NULL, &RNum0.w, &RNum0.h);
+	SDL_QueryTexture(texNum1, NULL, NULL, &RNum1.w, &RNum1.h);
+	SDL_QueryTexture(texNum2, NULL, NULL, &RNum2.w, &RNum2.h);
+	SDL_QueryTexture(texNum3, NULL, NULL, &RNum3.w, &RNum3.h);
+	SDL_QueryTexture(texNum4, NULL, NULL, &RNum4.w, &RNum4.h);
+	SDL_QueryTexture(texNum5, NULL, NULL, &RNum5.w, &RNum5.h);
+	SDL_QueryTexture(texNum6, NULL, NULL, &RNum6.w, &RNum6.h);
+	SDL_QueryTexture(texNum7, NULL, NULL, &RNum7.w, &RNum7.h);
+	SDL_QueryTexture(texNum8, NULL, NULL, &RNum8.w, &RNum8.h);
+	SDL_QueryTexture(texNum9, NULL, NULL, &RNum9.w, &RNum9.h);
 	SDL_QueryTexture(texEdges, NULL, NULL, &REdges.w, &REdges.h);
 
 	// Bewegungsrichtungen
@@ -203,6 +266,7 @@ int main(int argc, char *argv[])
 	int Gravity = 0;
 	int oldlines = 0;
 	int maxlevel = MAXLEVEL;
+	int oldscore = 0;
 
 	
 	/*  // Controller
@@ -361,6 +425,390 @@ int main(int argc, char *argv[])
 		/* Next Block End */
 		/* Edges End */
 
+		/* Score Rendering */
+		int tempScore = 0;
+		if (game.score != oldscore)
+		{
+			scoreAusgabe.Stelle_1 = 0;
+			scoreAusgabe.Stelle_2 = 0;
+			scoreAusgabe.Stelle_3 = 0;
+			scoreAusgabe.Stelle_4 = 0;
+			scoreAusgabe.Stelle_5 = 0;
+			scoreAusgabe.Stelle_6 = 0;
+			tempScore = game.score;
+		}
+		
+		while (tempScore >= 100000)
+		{
+			scoreAusgabe.Stelle_1++;
+			tempScore -= 100000;
+		}
+		while (tempScore >= 10000)
+		{
+			scoreAusgabe.Stelle_2++;
+			tempScore -= 10000;
+		}
+		while (tempScore >= 1000)
+		{
+			scoreAusgabe.Stelle_3++;
+			tempScore -= 1000;
+		}
+		while (tempScore >= 100)
+		{
+			scoreAusgabe.Stelle_4++;
+			tempScore -= 100;
+		}
+		while (tempScore >= 10)
+		{
+			scoreAusgabe.Stelle_5++;
+			tempScore -= 10;
+		}
+		while (tempScore >= 1)
+		{
+			scoreAusgabe.Stelle_6++;
+			tempScore -= 1;
+		}
+		if (oldscore != game.score)
+		{
+			fprintf(print, "1: %d\n2: %d\n3: %d\n4: %d\n5: %d\n6: %d\n", scoreAusgabe.Stelle_1, scoreAusgabe.Stelle_2, scoreAusgabe.Stelle_3, scoreAusgabe.Stelle_4, scoreAusgabe.Stelle_5, scoreAusgabe.Stelle_6);
+		}
+		
+		oldscore = game.score;
+		if (scoreAusgabe.Stelle_1 || scoreAusgabe.Stelle_2 || scoreAusgabe.Stelle_3 || scoreAusgabe.Stelle_4 || scoreAusgabe.Stelle_5 || scoreAusgabe.Stelle_6)
+		{
+		switch (scoreAusgabe.Stelle_1)
+		{
+			case 0: 
+				RNum0.x = -0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum0.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum0, NULL, &RNum0);
+				break;
+			case 1: 
+				RNum1.x = -0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum1.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum1, NULL, &RNum1);
+				break;
+			case 2: 
+				RNum2.x = -0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum2.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum2, NULL, &RNum2);
+				break;
+			case 3: 
+				RNum3.x = -0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum3.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum3, NULL, &RNum3);
+				break;
+			case 4: 
+				RNum4.x = -0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum4.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum4, NULL, &RNum4);
+				break;
+			case 5: 
+				RNum5.x = -0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum5.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum5, NULL, &RNum5);
+				break;
+			case 6: 
+				RNum6.x = -0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum6.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum6, NULL, &RNum6);
+				break;
+			case 7: 
+				RNum7.x = -0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum7.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum7, NULL, &RNum7);
+				break;
+			case 8: 
+				RNum8.x = -0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum8.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum8, NULL, &RNum8);
+				break;
+			case 9: 
+				RNum9.x = -0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum9.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum9, NULL, &RNum9);
+				break;
+			default: 
+				break;
+		}
+		switch (scoreAusgabe.Stelle_2)
+		{
+			case 0: 
+				RNum0.x = 0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum0.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum0, NULL, &RNum0);
+				break;
+			case 1: 
+				RNum1.x = 0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum1.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum1, NULL, &RNum1);
+				break;
+			case 2: 
+				RNum2.x = 0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum2.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum2, NULL, &RNum2);
+				break;
+			case 3: 
+				RNum3.x = 0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum3.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum3, NULL, &RNum3);
+				break;
+			case 4: 
+				RNum4.x = 0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum4.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum4, NULL, &RNum4);
+				break;
+			case 5: 
+				RNum5.x = 0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum5.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum5, NULL, &RNum5);
+				break;
+			case 6: 
+				RNum6.x = 0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum6.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum6, NULL, &RNum6);
+				break;
+			case 7: 
+				RNum7.x = 0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum7.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum7, NULL, &RNum7);
+				break;
+			case 8: 
+				RNum8.x = 0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum8.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum8, NULL, &RNum8);
+				break;
+			case 9: 
+				RNum9.x = 0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum9.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum9, NULL, &RNum9);
+				break;
+			default: 
+				break;
+		}
+		switch (scoreAusgabe.Stelle_3)
+		{
+			case 0: 
+				RNum0.x = 1.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum0.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum0, NULL, &RNum0);
+				break;
+			case 1: 
+				RNum1.x = 1.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum1.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum1, NULL, &RNum1);
+				break;
+			case 2: 
+				RNum2.x = 1.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum2.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum2, NULL, &RNum2);
+				break;
+			case 3: 
+				RNum3.x = 1.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum3.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum3, NULL, &RNum3);
+				break;
+			case 4: 
+				RNum4.x = 1.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum4.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum4, NULL, &RNum4);
+				break;
+			case 5: 
+				RNum5.x = 1.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum5.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum5, NULL, &RNum5);
+				break;
+			case 6: 
+				RNum6.x = 1.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum6.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum6, NULL, &RNum6);
+				break;
+			case 7: 
+				RNum7.x = 1.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum7.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum7, NULL, &RNum7);
+				break;
+			case 8: 
+				RNum8.x = 1.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum8.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum8, NULL, &RNum8);
+				break;
+			case 9: 
+				RNum9.x = 1.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum9.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum9, NULL, &RNum9);
+				break;
+			default: 
+				break;
+		}
+		switch (scoreAusgabe.Stelle_4)
+		{
+			case 0: 
+				RNum0.x = 2.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum0.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum0, NULL, &RNum0);
+				break;
+			case 1: 
+				RNum1.x = 2.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum1.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum1, NULL, &RNum1);
+				break;
+			case 2: 
+				RNum2.x = 2.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum2.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum2, NULL, &RNum2);
+				break;
+			case 3: 
+				RNum3.x = 2.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum3.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum3, NULL, &RNum3);
+				break;
+			case 4: 
+				RNum4.x = 2.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum4.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum4, NULL, &RNum4);
+				break;
+			case 5: 
+				RNum5.x = 2.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum5.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum5, NULL, &RNum5);
+				break;
+			case 6: 
+				RNum6.x = 2.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum6.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum6, NULL, &RNum6);
+				break;
+			case 7: 
+				RNum7.x = 2.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum7.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum7, NULL, &RNum7);
+				break;
+			case 8: 
+				RNum8.x = 2.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum8.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum8, NULL, &RNum8);
+				break;
+			case 9: 
+				RNum9.x = 2.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum9.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum9, NULL, &RNum9);
+				break;
+			default: 
+				break;
+		}
+		switch (scoreAusgabe.Stelle_5)
+		{
+			case 0: 
+				RNum0.x = 3.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum0.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum0, NULL, &RNum0);
+				break;
+			case 1: 
+				RNum1.x = 3.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum1.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum1, NULL, &RNum1);
+				break;
+			case 2: 
+				RNum2.x = 3.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum2.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum2, NULL, &RNum2);
+				break;
+			case 3: 
+				RNum3.x = 3.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum3.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum3, NULL, &RNum3);
+				break;
+			case 4: 
+				RNum4.x = 3.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum4.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum4, NULL, &RNum4);
+				break;
+			case 5: 
+				RNum5.x = 3.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum5.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum5, NULL, &RNum5);
+				break;
+			case 6: 
+				RNum6.x = 3.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum6.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum6, NULL, &RNum6);
+				break;
+			case 7: 
+				RNum7.x = 3.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum7.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum7, NULL, &RNum7);
+				break;
+			case 8: 
+				RNum8.x = 3.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum8.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum8, NULL, &RNum8);
+				break;
+			case 9: 
+				RNum9.x = 3.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum9.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum9, NULL, &RNum9);
+				break;
+			default: 
+				break;
+		}
+		switch (scoreAusgabe.Stelle_6)
+		{
+			case 0: 
+				RNum0.x = 4.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum0.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum0, NULL, &RNum0);
+				break;
+			case 1: 
+				RNum1.x = 4.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum1.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum1, NULL, &RNum1);
+				break;
+			case 2: 
+				RNum2.x = 4.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum2.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum2, NULL, &RNum2);
+				break;
+			case 3: 
+				RNum3.x = 4.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum3.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum3, NULL, &RNum3);
+				break;
+			case 4: 
+				RNum4.x = 4.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum4.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum4, NULL, &RNum4);
+				break;
+			case 5: 
+				RNum5.x = 4.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum5.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum5, NULL, &RNum5);
+				break;
+			case 6: 
+				RNum6.x = 4.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum6.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum6, NULL, &RNum6);
+				break;
+			case 7: 
+				RNum7.x = 4.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum7.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum7, NULL, &RNum7);
+				break;
+			case 8: 
+				RNum8.x = 4.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum8.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum8, NULL, &RNum8);
+				break;
+			case 9: 
+				RNum9.x = 4.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum9.y = 5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texNum9, NULL, &RNum9);
+				break;
+			default: 
+				break;
+		}
+		}
+		/* Score Rendering End */
+		
 		/* Next Block Rendering */
 		switch(game.next.type + 1)
 		{
