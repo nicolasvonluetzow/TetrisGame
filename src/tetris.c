@@ -188,7 +188,7 @@ void tetrisAddToMap (tetrisGame *game){
 	tetrisGetNextBlock(game);
 }
 
-void tetrisCheckLines (tetrisGame *game){
+int* tetrisCheckLines (tetrisGame *game, int *pLinesNeeded, int maxlevel){
 	int viableLines = 0;
 	for(int y = 0; y < game->rows; y++){
 		bool viable = true;
@@ -210,6 +210,18 @@ void tetrisCheckLines (tetrisGame *game){
 		}
 	}
 	
+	game->lines += viableLines;
+	
+	if ((game->lines >= (*pLinesNeeded)) && ((*pLinesNeeded) <= 10*maxlevel))
+	{
+		while(game->level < ((*pLinesNeeded) /10))
+		{
+			game->level++;
+		}
+		
+		pLinesNeeded++;
+	}
+	
 	if (viableLines == 1) {
 			game->score += 40 * (game->level + 1);
 	}
@@ -223,8 +235,7 @@ void tetrisCheckLines (tetrisGame *game){
 			game->score += 1200 * (game->level + 1);
 	}
 	
-	
-	game->lines += viableLines;
+	return(pLinesNeeded);
 }
 
 //Returns information from the blockTypes Array to be used in other files.

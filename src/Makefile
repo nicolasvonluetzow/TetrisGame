@@ -6,7 +6,7 @@ LFLAGS = -L./SDL/lib -lmingw32 -lSDL2main -lSDL2 -mwindows -lSDL2_image -lSDL2_m
 SRC = main.c tetris.c
 #Headers
 HDRS = tetris.h
-#Kompilierte Exe (T.exe beim Entwickeln, um es schneller eingeben zu koennen)
+#Kompilierte Exe
 EXE = T.exe
 
 

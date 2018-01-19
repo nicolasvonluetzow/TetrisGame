@@ -3,6 +3,7 @@
 #include <time.h>
 #include "tetris.h"
 
+
 #ifdef __MINGW32__
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_timer.h>
@@ -29,34 +30,41 @@ int main(int argc, char *argv[])
 	// Pixels per Block
 	int PpB = RESOLUTION_HEIGHT / 25;
 	srand(time(NULL));
+	
+	printf("argc = %d, name of exe: %s\n\n", argc, argv[0]);
 
 	tetrisGame game;
 	tetrisGame* pointGame;
 	pointGame = &game;
+	
 	game.rows = 20;
 	game.columns = 10;
 	game.score = 0;
-	game.level = 0;
+	game.level = STARTLEVEL;
 	game.lines = 0;
+	
 	block fall;
 	fall.type = 0;
 	game.falling = fall;
+	
 	block nex;
 	nex.type = 0;
 	game.next = nex;
 	
+	
 	FILE *print;
 	print = fopen("output.txt", "w");
 	
-	int *LinesNeeded = (int*) malloc(MAXLEVEL*sizeof(int));
+	int *LinesNeeded = (int*) malloc((MAXLEVEL + 1)*sizeof(int));
 	for (int i = 0, k = 10; i < MAXLEVEL; i++, k+=10)
 	{
 		LinesNeeded[i] = k;
+	fprintf(print, "LinesNeeded[%d]: %d\n", i, LinesNeeded[i]);
 	}
-	
+
 	int* pLinesNeeded = LinesNeeded;
 	for (int i = 0; i < STARTLEVEL; i++, pLinesNeeded++);
-	
+	fprintf(print, "pLinesNeeded: %d\n", *pLinesNeeded);
 	int renderMap[game.rows][game.columns];
 
 	tetrisGetNextBlock (pointGame);
@@ -193,7 +201,9 @@ int main(int argc, char *argv[])
 	int down = 0;
 	int Gravity = 0;
 	int oldlines = 0;
+	int maxlevel = MAXLEVEL;
 
+	
 	/*  // Controller
 	SDL_Joystick* joystick = SDL_JoystickOpen(0);
 	printf("Controller Name: %s\n", SDL_JoystickName(joystick));
@@ -320,7 +330,7 @@ int main(int argc, char *argv[])
 			REdges.y = game.rows * PpB + 3*PpB;
 				SDL_RenderCopy(rend, texEdges, NULL, &REdges);
 		}
-		/* Edges Ende */
+		/* Edges End */
 
 
 		for (int x = 0; x < game.columns; x++)
@@ -363,17 +373,12 @@ int main(int argc, char *argv[])
 			}
 		}
 		
-		tetrisCheckLines(pointGame);
-		// pointer an tetrisCheckLines() übergeben, hier weiterarbeiten
-		if (game.lines >= (*pLinesNeeded) && ((*pLinesNeeded) < 10*MAXLEVEL))
-		{
-			pLinesNeeded++;
-			int shouldBeLevel = ((*pLinesNeeded - 10) /10);
-			for (; game.level < shouldBeLevel; game.level++);
-		}
+		pLinesNeeded = tetrisCheckLines(pointGame, pLinesNeeded, maxlevel);
+		
 			
 		if (oldlines != game.lines)
 		{
+			fprintf(print, "pLinesNeeded: %d\n", *pLinesNeeded);
 			fprintf(print, "Lines: %d\n", game.lines);
 			fprintf(print, "Score: %d\n", game.score);
 			fprintf(print, "Level: %d\n\n", game.level);
