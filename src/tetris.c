@@ -48,7 +48,7 @@ void tetrisGetNextBlock (tetrisGame *game){
 	posi.x = (game->columns)/2;
 	posi.y = 0;
 	nextBlock.pos = posi;
-	
+
 	game->falling = game->next;
 	game->next = nextBlock;
 	

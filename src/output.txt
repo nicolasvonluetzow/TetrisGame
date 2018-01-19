@@ -19,3 +19,47 @@ LinesNeeded[17]: 180
 LinesNeeded[18]: 190
 LinesNeeded[19]: 200
 pLinesNeeded: 10
+Lines: 2
+Score: 100
+Level: 0
+
+Lines: 4
+Score: 200
+Level: 0
+
+Lines: 8
+Score: 1400
+Level: 0
+
+Lines: 9
+Score: 1440
+Level: 0
+
+Lines: 13
+Score: 3840
+Level: 1
+
+Lines: 14
+Score: 3920
+Level: 1
+
+Lines: 15
+Score: 4000
+Level: 1
+
+Lines: 16
+Score: 4080
+Level: 1
+
+Lines: 17
+Score: 4160
+Level: 1
+
+Lines: 18
+Score: 4240
+Level: 1
+
+Lines: 20
+Score: 4540
+Level: 2
+

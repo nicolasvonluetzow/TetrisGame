@@ -28,7 +28,7 @@
 int main(int argc, char *argv[])
 {
 	// Pixels per Block
-	int PpB = RESOLUTION_HEIGHT / 25;
+	float PpB = RESOLUTION_HEIGHT / 25;
 	srand(time(NULL));
 	
 	printf("argc = %d, name of exe: %s\n\n", argc, argv[0]);
@@ -66,6 +66,7 @@ int main(int argc, char *argv[])
 	for (int i = 0; i < STARTLEVEL; i++, pLinesNeeded++);
 	fprintf(print, "pLinesNeeded: %d\n", *pLinesNeeded);
 	int renderMap[game.rows][game.columns];
+	// int showNextBlock[4][4];
 
 	tetrisGetNextBlock (pointGame);
 	tetrisGetNextBlock (pointGame);
@@ -95,7 +96,7 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	SDL_Window* win = SDL_CreateWindow("Tetris 1984",
+	SDL_Window* win = SDL_CreateWindow("Tetris NES",
 										SDL_WINDOWPOS_CENTERED,
 										SDL_WINDOWPOS_CENTERED,
 										RESOLUTION_WIDTH,
@@ -306,6 +307,7 @@ int main(int argc, char *argv[])
 
 
 		/* Edges Start */
+		/* Main */
 		for (int y = 0; y < game.rows; y++)
 		{
 			REdges.x = -1 * PpB + (RESOLUTION_WIDTH/2) - 5*PpB;
@@ -329,10 +331,142 @@ int main(int argc, char *argv[])
 			REdges.x = x * PpB + (RESOLUTION_WIDTH/2) - 5*PpB;
 			REdges.y = game.rows * PpB + 3*PpB;
 				SDL_RenderCopy(rend, texEdges, NULL, &REdges);
+		} /* Main End */
+		
+		/* Next Block */
+		for (int y = 0; y < 3; y++)
+		{
+			REdges.x = -1 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+			REdges.y = y * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texEdges, NULL, &REdges);
 		}
+		for (int y = 0; y < 3; y++)
+		{
+			REdges.x = 5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+			REdges.y = y * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texEdges, NULL, &REdges);
+		}
+		for (int x = -1; x < (4 + 2); x++)
+		{
+			REdges.x = x * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+			REdges.y = -1 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texEdges, NULL, &REdges);
+		}
+		for (int x = -1; x < (4 + 2); x++)
+		{
+			REdges.x = x * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+			REdges.y = 3 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texEdges, NULL, &REdges);
+		}
+		/* Next Block End */
 		/* Edges End */
 
-
+		/* Next Block Rendering */
+		switch(game.next.type + 1)
+		{
+			case 1:
+				RBlockI.x = 0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RBlockI.y = 1 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texBlockI, NULL, &RBlockI);
+				RBlockI.x = 1.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RBlockI.y = 1 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texBlockI, NULL, &RBlockI);
+				RBlockI.x = 2.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RBlockI.y = 1 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texBlockI, NULL, &RBlockI);
+				RBlockI.x = 3.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RBlockI.y = 1 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texBlockI, NULL, &RBlockI);
+				break;
+			case 2:
+				RBlockL.x = 1 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RBlockL.y = 0.5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texBlockL, NULL, &RBlockL);
+				RBlockL.x = 2 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RBlockL.y = 0.5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texBlockL, NULL, &RBlockL);
+				RBlockL.x = 3 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RBlockL.y = 0.5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texBlockL, NULL, &RBlockL);
+				RBlockL.x = 1 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RBlockL.y = 1.5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texBlockL, NULL, &RBlockL);
+				break;
+			case 3:
+				RBlockJ.x = 1 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RBlockJ.y = 0.5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texBlockJ, NULL, &RBlockJ);
+				RBlockJ.x = 2 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RBlockJ.y = 0.5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texBlockJ, NULL, &RBlockJ);
+				RBlockJ.x = 3 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RBlockJ.y = 0.5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texBlockJ, NULL, &RBlockJ);
+				RBlockJ.x = 3 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RBlockJ.y = 1.5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texBlockJ, NULL, &RBlockJ);
+				break;
+			case 4:
+				RBlockO.x = 1.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RBlockO.y = 0.5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texBlockO, NULL, &RBlockO);
+				RBlockO.x = 1.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RBlockO.y = 1.5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texBlockO, NULL, &RBlockO);
+				RBlockO.x = 2.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RBlockO.y = 0.5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texBlockO, NULL, &RBlockO);
+				RBlockO.x = 2.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RBlockO.y = 1.5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texBlockO, NULL, &RBlockO);
+				break;
+			case 5:
+				RBlockS.x = 1 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RBlockS.y = 1.5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texBlockS, NULL, &RBlockS);
+				RBlockS.x = 2 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RBlockS.y = 0.5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texBlockS, NULL, &RBlockS);
+				RBlockS.x = 3 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RBlockS.y = 0.5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texBlockS, NULL, &RBlockS);
+				RBlockS.x = 2 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RBlockS.y = 1.5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texBlockS, NULL, &RBlockS);
+				break;
+			case 6:
+				RBlockT.x = 1 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RBlockT.y = 0.5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texBlockT, NULL, &RBlockT);
+				RBlockT.x = 2 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RBlockT.y = 0.5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texBlockT, NULL, &RBlockT);
+				RBlockT.x = 3 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RBlockT.y = 0.5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texBlockT, NULL, &RBlockT);
+				RBlockT.x = 2 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RBlockT.y = 1.5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texBlockT, NULL, &RBlockT);
+				break;
+			case 7:
+				RBlockZ.x = 1 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RBlockZ.y = 0.5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texBlockZ, NULL, &RBlockZ);
+				RBlockZ.x = 2 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RBlockZ.y = 0.5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texBlockZ, NULL, &RBlockZ);
+				RBlockZ.x = 3 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RBlockZ.y = 1.5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texBlockZ, NULL, &RBlockZ);
+				RBlockZ.x = 2 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RBlockZ.y = 1.5 * PpB + 3*PpB;
+				SDL_RenderCopy(rend, texBlockZ, NULL, &RBlockZ);
+				break;
+			default:
+				break;
+		} /* Next Block Rendering End */
+		
+		/* Main Rendering */
 		for (int x = 0; x < game.columns; x++)
 		{
 			for (int y = 0; y < game.rows; y++)
@@ -356,13 +490,13 @@ int main(int argc, char *argv[])
 							RBlockS.y = y * PpB + 3*PpB;
 								SDL_RenderCopy(rend, texBlockS, NULL, &RBlockS);
 							break;
-					case 5: RBlockT.x = x * PpB + (RESOLUTION_WIDTH/2) - 5*PpB;
-							RBlockT.y = y * PpB + 3*PpB;
-								SDL_RenderCopy(rend, texBlockT, NULL, &RBlockT);
-							break;
-					case 6: RBlockO.x = x * PpB + (RESOLUTION_WIDTH/2) - 5*PpB;
+					case 5: RBlockO.x = x * PpB + (RESOLUTION_WIDTH/2) - 5*PpB;
 							RBlockO.y = y * PpB + 3*PpB;
 								SDL_RenderCopy(rend, texBlockO, NULL, &RBlockO);
+							break;
+					case 6: RBlockT.x = x * PpB + (RESOLUTION_WIDTH/2) - 5*PpB;
+							RBlockT.y = y * PpB + 3*PpB;
+								SDL_RenderCopy(rend, texBlockT, NULL, &RBlockT);
 							break;
 					case 7: RBlockZ.x = x * PpB + (RESOLUTION_WIDTH/2) - 5*PpB;
 							RBlockZ.y = y * PpB + 3*PpB;
@@ -371,14 +505,13 @@ int main(int argc, char *argv[])
 					default: break;
 				}
 			}
-		}
+		} /* Main Rendering End */
 		
 		pLinesNeeded = tetrisCheckLines(pointGame, pLinesNeeded, maxlevel);
 		
 			
 		if (oldlines != game.lines)
 		{
-			fprintf(print, "pLinesNeeded: %d\n", *pLinesNeeded);
 			fprintf(print, "Lines: %d\n", game.lines);
 			fprintf(print, "Score: %d\n", game.score);
 			fprintf(print, "Level: %d\n\n", game.level);
