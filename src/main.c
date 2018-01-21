@@ -267,6 +267,8 @@ int main(int argc, char *argv[])
 	int oldlines = 0;
 	int maxlevel = MAXLEVEL;
 	int oldscore = 0;
+	int timer = 0;
+	int tempTimer = 0;
 	scoreAusgabe.Stelle_1 = 0;	
 	scoreAusgabe.Stelle_2 = 0;
 	scoreAusgabe.Stelle_3 = 0;
@@ -963,18 +965,32 @@ int main(int argc, char *argv[])
 		}
 		
 		oldlines = game.lines;
+		
+		tempTimer += 1;
+		if (tempTimer >= FPS)
+		{
+			timer += 1;
+			tempTimer -= FPS;
+		}
+		
+		Gravity+= 2*(game.level + 1);
+		
 		SDL_RenderPresent(rend);
 
 
 		/* On every Frame */
 		SDL_Delay(1000/FPS);
-		Gravity+= 2*(game.level + 1);
 
 
 
 
 	} /* Animation Ende */
 
+	/* Score Documentation */
+	FILE* Scoreboard;
+	Scoreboard = fopen("scoreboard.txt", "a");
+	fprintf(Scoreboard, "Score: %d, reachedLevel: %d, while surviving for %d seconds.\n", game.score, game.level, timer);
+	
 	/* Resourcen schliessen */
 	SDL_DestroyTexture(texBlockI);
 	SDL_DestroyTexture(texBlockL);
@@ -990,6 +1006,7 @@ int main(int argc, char *argv[])
 	SDL_Quit();
 	free(LinesNeeded);
 	fclose(print);
+	fclose(Scoreboard);
 	
 	return 0;
 }
