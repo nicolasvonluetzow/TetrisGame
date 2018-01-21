@@ -267,6 +267,12 @@ int main(int argc, char *argv[])
 	int oldlines = 0;
 	int maxlevel = MAXLEVEL;
 	int oldscore = 0;
+	scoreAusgabe.Stelle_1 = 0;	
+	scoreAusgabe.Stelle_2 = 0;
+	scoreAusgabe.Stelle_3 = 0;
+	scoreAusgabe.Stelle_4 = 0;
+	scoreAusgabe.Stelle_5 = 0;
+	scoreAusgabe.Stelle_6 = 0;
 
 	
 	/*  // Controller
@@ -426,6 +432,27 @@ int main(int argc, char *argv[])
 		/* Edges End */
 
 		/* Score Rendering */
+		/* Basic Null */
+				RNum0.x = -0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum0.y = 5 * PpB + 3*PpB;
+		SDL_RenderCopy(rend, texNum0, NULL, &RNum0);
+				RNum0.x = 0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum0.y = 5 * PpB + 3*PpB;
+		SDL_RenderCopy(rend, texNum0, NULL, &RNum0);
+				RNum0.x = 1.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum0.y = 5 * PpB + 3*PpB;
+		SDL_RenderCopy(rend, texNum0, NULL, &RNum0);
+				RNum0.x = 2.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum0.y = 5 * PpB + 3*PpB;
+		SDL_RenderCopy(rend, texNum0, NULL, &RNum0);
+				RNum0.x = 3.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum0.y = 5 * PpB + 3*PpB;
+		SDL_RenderCopy(rend, texNum0, NULL, &RNum0);
+				RNum0.x = 4.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+				RNum0.y = 5 * PpB + 3*PpB;
+		SDL_RenderCopy(rend, texNum0, NULL, &RNum0);
+		/* Basic Null End */
+		
 		int tempScore = 0;
 		if (game.score != oldscore)
 		{
@@ -478,11 +505,6 @@ int main(int argc, char *argv[])
 		{
 		switch (scoreAusgabe.Stelle_1)
 		{
-			case 0: 
-				RNum0.x = -0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
-				RNum0.y = 5 * PpB + 3*PpB;
-				SDL_RenderCopy(rend, texNum0, NULL, &RNum0);
-				break;
 			case 1: 
 				RNum1.x = -0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
 				RNum1.y = 5 * PpB + 3*PpB;
@@ -533,11 +555,6 @@ int main(int argc, char *argv[])
 		}
 		switch (scoreAusgabe.Stelle_2)
 		{
-			case 0: 
-				RNum0.x = 0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
-				RNum0.y = 5 * PpB + 3*PpB;
-				SDL_RenderCopy(rend, texNum0, NULL, &RNum0);
-				break;
 			case 1: 
 				RNum1.x = 0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
 				RNum1.y = 5 * PpB + 3*PpB;
@@ -588,11 +605,6 @@ int main(int argc, char *argv[])
 		}
 		switch (scoreAusgabe.Stelle_3)
 		{
-			case 0: 
-				RNum0.x = 1.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
-				RNum0.y = 5 * PpB + 3*PpB;
-				SDL_RenderCopy(rend, texNum0, NULL, &RNum0);
-				break;
 			case 1: 
 				RNum1.x = 1.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
 				RNum1.y = 5 * PpB + 3*PpB;
@@ -643,11 +655,6 @@ int main(int argc, char *argv[])
 		}
 		switch (scoreAusgabe.Stelle_4)
 		{
-			case 0: 
-				RNum0.x = 2.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
-				RNum0.y = 5 * PpB + 3*PpB;
-				SDL_RenderCopy(rend, texNum0, NULL, &RNum0);
-				break;
 			case 1: 
 				RNum1.x = 2.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
 				RNum1.y = 5 * PpB + 3*PpB;
@@ -698,11 +705,6 @@ int main(int argc, char *argv[])
 		}
 		switch (scoreAusgabe.Stelle_5)
 		{
-			case 0: 
-				RNum0.x = 3.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
-				RNum0.y = 5 * PpB + 3*PpB;
-				SDL_RenderCopy(rend, texNum0, NULL, &RNum0);
-				break;
 			case 1: 
 				RNum1.x = 3.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
 				RNum1.y = 5 * PpB + 3*PpB;
@@ -753,11 +755,6 @@ int main(int argc, char *argv[])
 		}
 		switch (scoreAusgabe.Stelle_6)
 		{
-			case 0: 
-				RNum0.x = 4.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
-				RNum0.y = 5 * PpB + 3*PpB;
-				SDL_RenderCopy(rend, texNum0, NULL, &RNum0);
-				break;
 			case 1: 
 				RNum1.x = 4.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
 				RNum1.y = 5 * PpB + 3*PpB;

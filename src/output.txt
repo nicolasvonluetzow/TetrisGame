@@ -19,3 +19,113 @@ LinesNeeded[17]: 180
 LinesNeeded[18]: 190
 LinesNeeded[19]: 200
 pLinesNeeded: 10
+Lines: 1
+Score: 40
+Level: 0
+
+1: 0
+2: 0
+3: 0
+4: 0
+5: 4
+6: 0
+Lines: 3
+Score: 140
+Level: 0
+
+1: 0
+2: 0
+3: 0
+4: 1
+5: 4
+6: 0
+Lines: 4
+Score: 180
+Level: 0
+
+1: 0
+2: 0
+3: 0
+4: 1
+5: 8
+6: 0
+Lines: 5
+Score: 220
+Level: 0
+
+1: 0
+2: 0
+3: 0
+4: 2
+5: 2
+6: 0
+Lines: 6
+Score: 260
+Level: 0
+
+1: 0
+2: 0
+3: 0
+4: 2
+5: 6
+6: 0
+Lines: 7
+Score: 300
+Level: 0
+
+1: 0
+2: 0
+3: 0
+4: 3
+5: 0
+6: 0
+Lines: 8
+Score: 340
+Level: 0
+
+1: 0
+2: 0
+3: 0
+4: 3
+5: 4
+6: 0
+Lines: 9
+Score: 380
+Level: 0
+
+1: 0
+2: 0
+3: 0
+4: 3
+5: 8
+6: 0
+Lines: 10
+Score: 460
+Level: 1
+
+1: 0
+2: 0
+3: 0
+4: 4
+5: 6
+6: 0
+Lines: 11
+Score: 540
+Level: 1
+
+1: 0
+2: 0
+3: 0
+4: 5
+5: 4
+6: 0
+Lines: 12
+Score: 620
+Level: 1
+
+1: 0
+2: 0
+3: 0
+4: 6
+5: 2
+6: 0
