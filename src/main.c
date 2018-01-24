@@ -24,6 +24,7 @@
 #define FPS 60
 #define STARTLEVEL 0
 #define MAXLEVEL 20
+#define DIFFICULTY 1
 
 
 typedef struct 
@@ -35,6 +36,13 @@ typedef struct
 	int Stelle_5;
 	int Stelle_6;
 } Stellen;
+
+typedef struct
+{
+	int Stelle_1;
+	int Stelle_2;
+	int Stelle_3;
+} StellenLines;
 	
 	
 int main(int argc, char *argv[])
@@ -46,6 +54,7 @@ int main(int argc, char *argv[])
 	printf("argc = %d, name of exe: %s\n\n", argc, argv[0]);
 
 	Stellen scoreAusgabe;
+	StellenLines linesAusgabe;
 	tetrisGame game;
 	tetrisGame* pointGame;
 	pointGame = &game;
@@ -78,9 +87,10 @@ int main(int argc, char *argv[])
 	int* pLinesNeeded = LinesNeeded;
 	for (int i = 0; i < STARTLEVEL; i++, pLinesNeeded++);
 	fprintf(print, "pLinesNeeded: %d\n", *pLinesNeeded);
-	/*
+	
 	int *GravityArray = (int*) malloc(40*sizeof(int));
-	for (int i = 0, k = 48; i < 9; k -= 5)
+	
+	for (int i = 0, k = 48; i < 9; i++, k -= 5)
 	{
 		GravityArray[i] = k;  // 0-8 filled
 	}
@@ -107,7 +117,6 @@ int main(int argc, char *argv[])
 	}
 	int* pGravityArray = GravityArray;
 	for (int i = 0; i < STARTLEVEL; i++, pGravityArray++);
-	*/
 	
 	int renderMap[game.rows][game.columns];
 	// int showNextBlock[4][4];
@@ -247,7 +256,7 @@ int main(int argc, char *argv[])
 
 	/* Music */
 	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
-	Mix_Music* BackgroundMusic = Mix_LoadMUS("music/BackgroundMusic.mp3");
+	Mix_Music* BackgroundMusic = Mix_LoadMUS("music/BackgroundMusic1.mp3");
 	Mix_PlayMusic(BackgroundMusic, -1);
 
 
@@ -294,14 +303,14 @@ int main(int argc, char *argv[])
 
 	// Bewegungsrichtungen
 	int down = 0;
-	int Gravity = 0;
 	int oldlines = 0;
+	int oldlines2 = 0;
 	int maxlevel = MAXLEVEL;
 	int oldscore = 0;
 	int timer = 0;
 	int tempTimer = 0;
 	int Framecounter = 0;
-	// int levelCheck = STARTLEVEL;
+	int levelCheck = STARTLEVEL;
 	
 	scoreAusgabe.Stelle_1 = 0;	
 	scoreAusgabe.Stelle_2 = 0;
@@ -309,6 +318,11 @@ int main(int argc, char *argv[])
 	scoreAusgabe.Stelle_4 = 0;
 	scoreAusgabe.Stelle_5 = 0;
 	scoreAusgabe.Stelle_6 = 0;
+	
+	linesAusgabe.Stelle_1 = 0;
+	linesAusgabe.Stelle_2 = 0;
+	linesAusgabe.Stelle_3 = 0;
+	
 
 	
 	/*  // Controller
@@ -386,18 +400,16 @@ int main(int argc, char *argv[])
 
 		
 		/* Gravity */
-		/*
 		if (levelCheck != game.level)
 		{
 			pGravityArray++;
 		}
 		levelCheck = game.level;
-		if (Framecounter == (*pGravityArray))
+		if (Framecounter >= (*pGravityArray))
 		{
 			tetrisApplyGravity(pointGame);
-			Framecounter = 0;
+			Framecounter -= (*pGravityArray);
 		}
-		*/
 
 		// Leere das Fenster
 		SDL_RenderClear(rend);
@@ -496,6 +508,211 @@ int main(int argc, char *argv[])
 		SDL_RenderCopy(rend, texNum0, NULL, &RNum0);
 		/* Basic Null End */
 		
+		/* Lines Ausgabe */
+		int tempLinesCounter = 0;
+		
+		if (game.lines != oldlines2)
+		{
+			fprintf(print, "game.lines: %d\noldlines2: %d\n", game.lines, oldlines2);
+			linesAusgabe.Stelle_1 = 0;
+			linesAusgabe.Stelle_2 = 0;
+			linesAusgabe.Stelle_3 = 0;
+			tempLinesCounter = game.lines;
+		}
+		
+		if (tempLinesCounter != 0)
+		{ 
+			fprintf(print, "tempLinesCounter: %d\n", tempLinesCounter);
+		}
+		
+		while (tempLinesCounter >= 100)
+		{
+			linesAusgabe.Stelle_1++;
+			tempLinesCounter -= 100;
+		}
+		
+		while (tempLinesCounter >= 10)
+		{
+			linesAusgabe.Stelle_2++;
+			tempLinesCounter -= 10;
+		}
+		
+		while (tempLinesCounter >= 1)
+		{
+			linesAusgabe.Stelle_3++;
+			tempLinesCounter -= 1;
+		}
+		
+		RNum0.x = -0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+		RNum0.y = 7 * PpB + 3*PpB;
+			SDL_RenderCopy(rend, texNum0, NULL, &RNum0);
+		RNum0.x = 0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+		RNum0.y = 7 * PpB + 3*PpB;
+			SDL_RenderCopy(rend, texNum0, NULL, &RNum0);
+		RNum0.x = 1.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+		RNum0.y = 7 * PpB + 3*PpB;
+			SDL_RenderCopy(rend, texNum0, NULL, &RNum0);
+		
+		oldlines2 = game.lines;
+		
+		if (linesAusgabe.Stelle_1 || linesAusgabe.Stelle_2 || linesAusgabe.Stelle_3)
+		{
+			// fprintf(print, "Hier: Stelle_1: %d   Stelle_2: %d   Stelle_3: %d\n", linesAusgabe.Stelle_1, linesAusgabe.Stelle_2, linesAusgabe.Stelle_3);
+			switch (linesAusgabe.Stelle_1)
+			{
+				case 1: 
+					RNum1.x = -0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+					RNum1.y = 7 * PpB + 3*PpB;
+						SDL_RenderCopy(rend, texNum1, NULL, &RNum1);
+					break;
+				case 2:
+					RNum2.x = -0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+					RNum2.y = 7 * PpB + 3*PpB;
+						SDL_RenderCopy(rend, texNum2, NULL, &RNum2);
+					break;
+				case 3:
+					RNum3.x = -0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+					RNum3.y = 7 * PpB + 3*PpB;
+						SDL_RenderCopy(rend, texNum3, NULL, &RNum3);
+					break;
+				case 4:
+					RNum4.x = -0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+					RNum4.y = 7 * PpB + 3*PpB;
+						SDL_RenderCopy(rend, texNum4, NULL, &RNum4);
+					break;
+				case 5:
+					RNum5.x = -0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+					RNum5.y = 7 * PpB + 3*PpB;
+						SDL_RenderCopy(rend, texNum5, NULL, &RNum5);
+					break;
+				case 6:
+					RNum6.x = -0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+					RNum6.y = 7 * PpB + 3*PpB;
+						SDL_RenderCopy(rend, texNum6, NULL, &RNum6);
+					break;
+				case 7:
+					RNum7.x = -0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+					RNum7.y = 7 * PpB + 3*PpB;
+						SDL_RenderCopy(rend, texNum7, NULL, &RNum7);
+					break;
+				case 8:
+					RNum8.x = -0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+					RNum8.y = 7 * PpB + 3*PpB;
+						SDL_RenderCopy(rend, texNum8, NULL, &RNum8);
+					break;
+				case 9:
+					RNum9.x = -0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+					RNum9.y = 7 * PpB + 3*PpB;
+						SDL_RenderCopy(rend, texNum9, NULL, &RNum9);
+					break;
+				default:
+					break;
+			}
+			
+			switch (linesAusgabe.Stelle_2)
+			{
+				case 1: 
+					RNum1.x = 0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+					RNum1.y = 7 * PpB + 3*PpB;
+						SDL_RenderCopy(rend, texNum1, NULL, &RNum1);
+					break;
+				case 2:
+					RNum2.x = 0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+					RNum2.y = 7 * PpB + 3*PpB;
+						SDL_RenderCopy(rend, texNum2, NULL, &RNum2);
+					break;
+				case 3:
+					RNum3.x = 0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+					RNum3.y = 7 * PpB + 3*PpB;
+						SDL_RenderCopy(rend, texNum3, NULL, &RNum3);
+					break;
+				case 4:
+					RNum4.x = 0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+					RNum4.y = 7 * PpB + 3*PpB;
+						SDL_RenderCopy(rend, texNum4, NULL, &RNum4);
+					break;
+				case 5:
+					RNum5.x = 0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+					RNum5.y = 7 * PpB + 3*PpB;
+						SDL_RenderCopy(rend, texNum5, NULL, &RNum5);
+					break;
+				case 6:
+					RNum6.x = 0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+					RNum6.y = 7 * PpB + 3*PpB;
+						SDL_RenderCopy(rend, texNum6, NULL, &RNum6);
+					break;
+				case 7:
+					RNum7.x = 0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+					RNum7.y = 7 * PpB + 3*PpB;
+						SDL_RenderCopy(rend, texNum7, NULL, &RNum7);
+					break;
+				case 8:
+					RNum8.x = 0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+					RNum8.y = 7 * PpB + 3*PpB;
+						SDL_RenderCopy(rend, texNum8, NULL, &RNum8);
+					break;
+				case 9:
+					RNum9.x = 0.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+					RNum9.y = 7 * PpB + 3*PpB;
+						SDL_RenderCopy(rend, texNum9, NULL, &RNum9);
+					break;
+				default:
+					break;
+			}
+			
+			switch (linesAusgabe.Stelle_3)
+			{
+				case 1: 
+					RNum1.x = 1.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+					RNum1.y = 7 * PpB + 3*PpB;
+						SDL_RenderCopy(rend, texNum1, NULL, &RNum1);
+					break;
+				case 2:
+					RNum2.x = 1.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+					RNum2.y = 7 * PpB + 3*PpB;
+						SDL_RenderCopy(rend, texNum2, NULL, &RNum2);
+					break;
+				case 3:
+					RNum3.x = 1.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+					RNum3.y = 7 * PpB + 3*PpB;
+						SDL_RenderCopy(rend, texNum3, NULL, &RNum3);
+					break;
+				case 4:
+					RNum4.x = 1.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+					RNum4.y = 7 * PpB + 3*PpB;
+						SDL_RenderCopy(rend, texNum4, NULL, &RNum4);
+					break;
+				case 5:
+					RNum5.x = 1.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+					RNum5.y = 7 * PpB + 3*PpB;
+						SDL_RenderCopy(rend, texNum5, NULL, &RNum5);
+					break;
+				case 6:
+					RNum6.x = 1.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+					RNum6.y = 7 * PpB + 3*PpB;
+						SDL_RenderCopy(rend, texNum6, NULL, &RNum6);
+					break;
+				case 7:
+					RNum7.x = 1.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+					RNum7.y = 7 * PpB + 3*PpB;
+						SDL_RenderCopy(rend, texNum7, NULL, &RNum7);
+					break;
+				case 8:
+					RNum8.x = 1.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+					RNum8.y = 7 * PpB + 3*PpB;
+						SDL_RenderCopy(rend, texNum8, NULL, &RNum8);
+					break;
+				case 9:
+					RNum9.x = 1.5 * PpB + (3*RESOLUTION_WIDTH/4) - 4*PpB;
+					RNum9.y = 7 * PpB + 3*PpB;
+						SDL_RenderCopy(rend, texNum9, NULL, &RNum9);
+					break;
+				default:
+					break;
+			}
+		}
+		
+		/* Score Ausgabe */
 		int tempScore = 0;
 		if (game.score != oldscore)
 		{
@@ -1014,18 +1231,17 @@ int main(int argc, char *argv[])
 			tempTimer -= FPS;
 		}
 		
-		// Gravity+= 2*(game.level + 1);
-		Framecounter += 1;
+		Framecounter += DIFFICULTY;
         /* Musik depending on level*/
         if(game.level!=z){
             switch(game.level){
-                case 1: Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+                case 5: Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
                         Mix_Music* BackgroundMusic = Mix_LoadMUS("music/SuperMarioLand.mp3");
                         Mix_PlayMusic(BackgroundMusic, -1);
                         z=game.level;
                         break;
-                case 2: Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
-                        Mix_Music* BackgroundMusic2 = Mix_LoadMUS("music/BackgroundMusic1.mp3");
+                case 10: Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+                        Mix_Music* BackgroundMusic2 = Mix_LoadMUS("music/BackgroundMusic.mp3");
                         Mix_PlayMusic(BackgroundMusic2, -1);
                         z=game.level;
                         break;
@@ -1063,10 +1279,8 @@ int main(int argc, char *argv[])
 	SDL_DestroyWindow(win);
 	SDL_Quit();
 	free(LinesNeeded);
-	/*
 	free(GravityArray);
-	*/
-	close(print);
+	fclose(print);
 	fclose(Scoreboard);
 	
 	return 0;
